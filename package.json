@@ -2,7 +2,7 @@
   "name": "MaplatEditor",
   "version": "0.3.2",
   "description": "",
-  "main": "lib/main.js",
+  "main": "backend/src/main.js",
   "scripts": {
     "testrun": "electron .",
     "win32": "gulp win32",
