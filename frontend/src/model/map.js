@@ -54,8 +54,8 @@ function zenHankakuLength(text) {
   let len = 0;
   const str = escape(text);
   for (let i=0; i<str.length; i++,len++) {
-    if (str.charAt(i) == "%") {
-      if (str.charAt(++i) == "u") {
+    if (str.charAt(i) === "%") {
+      if (str.charAt(++i) === "u") {
         i += 3;
         len++;
       }
@@ -120,20 +120,20 @@ for (let i=0; i<mapAttr.length; i++) {
   };
 }
 computed.displayTitle = function() {
-  if (this.map.title == null || this.map.title == '') return this.$t('mapmodel.untitled');
+  if (this.map.title == null || this.map.title === '') return this.$t('mapmodel.untitled');
   else {
     if (typeof this.map.title != 'object') {
       return this.map.title;
     } else {
       const title = this.map.title[this.lang];
-      if (title == null || title == '') return this.$t('mapmodel.untitled');
+      if (title == null || title === '') return this.$t('mapmodel.untitled');
       return title;
     }
   }
 };
 computed.defaultLangFlag = {
   get() {
-    return this.lang == this.currentLang;
+    return this.lang === this.currentLang;
     },
   set(newValue) {
     if (newValue) {
@@ -156,14 +156,13 @@ computed.defaultLangFlag = {
 computed.imageExtensionCalc = function() {
   if (this.imageExtension) return this.imageExtension;
   if (this.width && this.height) return 'jpg';
-  return;
 };
 computed.gcpsEditReady = function() {
   return (this.width && this.height && this.url_) || false;
 };
 computed.wmtsEditReady = function() {
   const tin = this.share.tinObjects[0];
-  return (this.mainLayerHash && this.wmtsDirty && tin.strict_status == Tin.STATUS_STRICT);
+  return (this.mainLayerHash && this.wmtsDirty && tin.strict_status === Tin.STATUS_STRICT);
 }
 computed.dirty = function() {
   return !_.isDeepEqual(this.map_, this.map);
@@ -172,16 +171,14 @@ computed.wmtsDirty = function() {
   return this.wmtsHash !== this.mainLayerHash;
 };
 computed.gcps = function() {
-  if (this.currentEditingLayer == 0) {
+  if (this.currentEditingLayer === 0) {
     return this.map.gcps;
   } else if (this.map.sub_maps.length > 0) {
     return this.map.sub_maps[this.currentEditingLayer - 1].gcps;
-  } else {
-    return;
   }
 };
 computed.edges = function() {
-  if (this.currentEditingLayer == 0) {
+  if (this.currentEditingLayer === 0) {
     if (!this.map.edges) this.$set(this.map, 'edges', []);
     return this.map.edges;
   } else if (this.map.sub_maps.length > 0) {
@@ -189,8 +186,6 @@ computed.edges = function() {
       this.$set(this.map.sub_maps[this.currentEditingLayer - 1], 'edges', []);
     }
     return this.map.sub_maps[this.currentEditingLayer - 1].edges;
-  } else {
-    return;
   }
 };
 computed.tinObject = {
@@ -218,23 +213,23 @@ computed.mainLayerHash = function() {
 };
 computed.bounds = {
   get() {
-    if (this.currentEditingLayer == 0) {
+    if (this.currentEditingLayer === 0) {
       return [this.width, this.height];
     }
     return this.map.sub_maps[this.currentEditingLayer - 1].bounds;
     },
   set(newValue) {
-    if (this.currentEditingLayer != 0) {
+    if (this.currentEditingLayer !== 0) {
       this.map.sub_maps[this.currentEditingLayer - 1].bounds = newValue;
     }
   }
 };
 computed.error = function() {
   const err = {};
-  if (this.mapID == null || this.mapID == '') err['mapID'] = 'mapedit.error_set_mapid';
+  if (this.mapID == null || this.mapID === '') err['mapID'] = 'mapedit.error_set_mapid';
   else if (this.mapID && !this.mapID.match(/^[\d\w_-]+$/)) err['mapID'] = 'mapedit.error_mapid_character';
   else if (!this.onlyOne) err['mapIDOnlyOne'] = 'mapedit.check_uniqueness';
-  if (this.map.title == null || this.map.title == '') err['title'] = this.$t('mapmodel.no_title');
+  if (this.map.title == null || this.map.title === '') err['title'] = this.$t('mapmodel.no_title');
   else {
     if (typeof this.map.title != 'object') {
       if (zenHankakuLength(this.map.title) > 30) err['title'] = this.$t('mapmodel.over_title', {lang: this.$t(`common.${this.langs[this.lang]}`)});
@@ -246,12 +241,12 @@ computed.error = function() {
       }
     }
   }
-  if (this.map.attr == null || this.map.attr == '') err['attr'] = this.$t('mapmodel.image_copyright');
+  if (this.map.attr == null || this.map.attr === '') err['attr'] = this.$t('mapmodel.image_copyright');
   if (this.blockingGcpsError) err['blockingGcpsError'] = 'blockingGcpsError';
   return Object.keys(err).length > 0 ? err : null;
 };
 computed.blockingGcpsError = function() {
-  return this.tinObjects.reduce((prev, curr) => curr == 'tooLinear' || curr == 'pointsOutside' || prev, false);
+  return this.tinObjects.reduce((prev, curr) => curr === 'tooLinear' || curr === 'pointsOutside' || prev, false);
 }
 computed.errorStatus = function() {
   const tinObject = this.tinObject;
@@ -260,14 +255,14 @@ computed.errorStatus = function() {
     tinObject.strict_status ? tinObject.strict_status : undefined;
 };
 computed.errorNumber = function() {
-  return this.errorStatus == 'strict_error' ? this.tinObject.kinks.bakw.features.length : 0;
+  return this.errorStatus === 'strict_error' ? this.tinObject.kinks.bakw.features.length : 0;
 }
 computed.importanceSortedSubMaps = function() {
   const array = Object.assign([], this.sub_maps);
   array.push(0);
   return array.sort((a, b) => {
-    const ac = a == 0 ? 0 : a.importance;
-    const bc = b == 0 ? 0 : b.importance;
+    const ac = a === 0 ? 0 : a.importance;
+    const bc = b === 0 ? 0 : b.importance;
     return (ac < bc ? 1 : -1);
   });
 };
@@ -277,29 +272,29 @@ computed.prioritySortedSubMaps = function() {
 };
 computed.canUpImportance = function() {
   const most = this.importanceSortedSubMaps[0];
-  const mostImportance = most == 0 ? 0 : most.importance;
-  return this.importance != mostImportance;
+  const mostImportance = most === 0 ? 0 : most.importance;
+  return this.importance !== mostImportance;
 };
 computed.canDownImportance = function() {
   const least = this.importanceSortedSubMaps[this.importanceSortedSubMaps.length - 1];
-  const leastImportance = least == 0 ? 0 : least.importance;
-  return this.importance != leastImportance;
+  const leastImportance = least === 0 ? 0 : least.importance;
+  return this.importance !== leastImportance;
 };
 computed.canUpPriority = function() {
-  if (this.currentEditingLayer == 0) return false;
+  if (this.currentEditingLayer === 0) return false;
   const mostPriority = this.prioritySortedSubMaps[0].priority;
-  return this.priority != mostPriority;
+  return this.priority !== mostPriority;
 };
 computed.canDownPriority = function() {
-  if (this.currentEditingLayer == 0) return false;
+  if (this.currentEditingLayer === 0) return false;
   const leastPriority = this.prioritySortedSubMaps[this.prioritySortedSubMaps.length - 1].priority;
-  return this.priority != leastPriority;
+  return this.priority !== leastPriority;
 };
 computed.importance = function() {
-  return this.currentEditingLayer == 0 ? 0 : this.sub_maps[this.currentEditingLayer - 1].importance;
+  return this.currentEditingLayer === 0 ? 0 : this.sub_maps[this.currentEditingLayer - 1].importance;
 }
 computed.priority = function() {
-  return this.currentEditingLayer == 0 ? 0 : this.sub_maps[this.currentEditingLayer - 1].priority;
+  return this.currentEditingLayer === 0 ? 0 : this.sub_maps[this.currentEditingLayer - 1].priority;
 }
 computed.editingID = {
   get() {
@@ -415,7 +410,7 @@ const VueMap = Vue.extend({
       const lang = this.lang;
       const val = this.map[key];
       if (typeof val != 'object') {
-        return lang == locale ? val : '';
+        return lang === locale ? val : '';
       } else {
         return val[locale] != null ? val[locale] : '';
       }
@@ -428,21 +423,21 @@ const VueMap = Vue.extend({
       let val = this.map[key];
       if (value == null) value = '';
       if (typeof val != 'object') {
-        if (lang == locale) {
+        if (lang === locale) {
           val = value;
-        } else if (value != '') {
+        } else if (value !== '') {
           const val_ = {};
           val_[lang] = val;
           val_[locale] = value;
           val = val_;
         }
       } else {
-        if (value == '' && lang != locale) {
+        if (value === '' && lang !== locale) {
           delete val[locale];
           const keys = Object.keys(val);
-          if (keys.length == 0) {
+          if (keys.length === 0) {
             val = '';
-          } else if (keys.length == 1 && keys[0] == lang) {
+          } else if (keys.length === 1 && keys[0] === lang) {
             val = val[lang];
           }
         } else {
@@ -469,7 +464,7 @@ const VueMap = Vue.extend({
       this.normalizePriority(this.prioritySortedSubMaps);
       },
     removeSubMap() {
-      if (this.currentEditingLayer == 0) return;
+      if (this.currentEditingLayer === 0) return;
       const index = this.currentEditingLayer - 1;
       this.currentEditingLayer = 0;
       this.sub_maps.splice(index, 1);
@@ -480,7 +475,7 @@ const VueMap = Vue.extend({
     normalizeImportance(arr) {
       const zeroIndex = arr.indexOf(0);
       arr.map((item, index) => {
-        if (index == zeroIndex) return;
+        if (index === zeroIndex) return;
         item.importance = zeroIndex - index;
       });
       },
@@ -492,7 +487,7 @@ const VueMap = Vue.extend({
     upImportance() {
       if (!this.canUpImportance) return;
       const arr = this.importanceSortedSubMaps;
-      const target = this.currentEditingLayer == 0 ? 0 : this.sub_maps[this.currentEditingLayer-1];
+      const target = this.currentEditingLayer === 0 ? 0 : this.sub_maps[this.currentEditingLayer-1];
       const index = arr.indexOf(target);
       arr.splice(index-1, 2, arr[index], arr[index-1]);
       this.normalizeImportance(arr);
@@ -500,7 +495,7 @@ const VueMap = Vue.extend({
     downImportance() {
       if (!this.canDownImportance) return;
       const arr = this.importanceSortedSubMaps;
-      const target = this.currentEditingLayer == 0 ? 0 : this.sub_maps[this.currentEditingLayer-1];
+      const target = this.currentEditingLayer === 0 ? 0 : this.sub_maps[this.currentEditingLayer-1];
       const index = arr.indexOf(target);
       arr.splice(index, 2, arr[index+1], arr[index]);
       this.normalizeImportance(arr);

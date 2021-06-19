@@ -2,7 +2,7 @@
 
 const pf = process.platform; // eslint-disable-line no-undef
 const isAsar = __dirname.match(/app\.asar/); // eslint-disable-line no-undef
-const canvasPath = pf == 'darwin' ?
+const canvasPath = pf === 'darwin' ?
   isAsar ? '../../../app.asar.unpacked/assets/mac/canvas' : '../../assets/mac/canvas' :
   isAsar ? '../../../app.asar.unpacked/assets/win/canvas' : '../../assets/win/canvas';
 const { createCanvas, loadImage } = require(canvasPath); // eslint-disable-line no-undef
@@ -49,7 +49,7 @@ const WmtsGenerator = {
       tmpFolder = `.${path.sep}tmp`;
     }
   },
-  async generate(mapID, width, height, tinSerial, extKey) {
+  async generate(mapID, width, height, tinSerial, extKey, hash) {
     try {
       const self = this;
       const tin = new Tin({});
@@ -122,7 +122,7 @@ const WmtsGenerator = {
 
       for (let i = 0; i < processArray.length; i++) {
         const process = processArray[i];
-        if (process[0] == maxZoom) {
+        if (process[0] === maxZoom) {
           await self.maxZoomTileLoop(tin, process[0], process[1], process[2], imageBuffer, width, height, tileRoot);
         } else {
           await self.upperZoomTileLoop(process[0], process[1], process[2], tileRoot);
@@ -130,13 +130,16 @@ const WmtsGenerator = {
         progress.update(i + 1);
       }
       if (focused) {
-        focused.webContents.send('wmtsGenerated', {});
+        focused.webContents.send('wmtsGenerated', {
+          hash
+        });
       }
     } catch (err) {
       console.log(err); // eslint-disable-line no-undef
       if (focused) {
         focused.webContents.send('wmtsGenerated', {
-          err
+          err,
+          hash
         });
       } else {
         console.log(err); // eslint-disable-line no-undef
@@ -233,8 +236,7 @@ const WmtsGenerator = {
       return {r: 0, g: 0, b: 0, a: 0};
     }
     const p = ((w * y) + x) * 4;
-    const ret = { r: pixels[p], g: pixels[p+1], b: pixels[p+2], a: pixels[p+3]};
-    return ret;
+    return { r: pixels[p], g: pixels[p+1], b: pixels[p+2], a: pixels[p+3]};
   },
   getWeight(t1, t2) {
     const a = -1;

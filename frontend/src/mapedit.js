@@ -1421,8 +1421,8 @@ function setVueMap() {
         if (arg.err) {
           console.log(arg.err); // eslint-disable-line no-undef
           vueModal.finish(t('wmtsgenerate.error_generation')); // eslint-disable-line no-undef
-          return;
         } else {
+          vueMap.wmtsHash = arg.hash;
           vueModal.finish(t('wmtsgenerate.success_generation')); // eslint-disable-line no-undef
         }
       });
@@ -1430,7 +1430,7 @@ function setVueMap() {
     document.body.style.pointerEvents = 'none'; // eslint-disable-line no-undef
     vueModal.show(t('wmtsgenerate.generating_tile'));
     setTimeout(() => { // eslint-disable-line no-undef
-      wmtsGenerator.generate(vueMap.mapID, vueMap.width, vueMap.height, vueMap.tinObjects[0].getCompiled(), vueMap.imageExtension);
+      wmtsGenerator.generate(vueMap.mapID, vueMap.width, vueMap.height, vueMap.tinObjects[0].getCompiled(), vueMap.imageExtension, vueMap.mainLayerHash);
     }, 1);
   });
   vueMap.$on('mapUpload', () => {
