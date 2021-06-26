@@ -2,39 +2,29 @@
 
 const fs = require('fs-extra'); // eslint-disable-line no-undef
 
-const pf = process.platform;
-var isAsar = __dirname.match(/app\.asar/);
+const pf = process.platform; // eslint-disable-line no-undef
+const isAsar = __dirname.match(/app\.asar/); // eslint-disable-line no-undef
 const assetsPath = pf == 'darwin' ?
   isAsar ? '../../../app.asar.unpacked/assets/mac' : '../../assets/mac' :
   isAsar ? '../../../app.asar.unpacked/assets/win' : '../../assets/win';
 const canvasPath = `${assetsPath}/canvas`;
-const { createCanvas, loadImage } = require(canvasPath);
-if (pf == 'darwin') {
-  process.env.DYLD_LIBRARY_PATH = [
-    '$DYLD_LIBRARY_PATH',
-    `${assetsPath}/lib`
-  ].join(':');
-}
+const { createCanvas, loadImage } = require(canvasPath); // eslint-disable-line no-undef
 
-exports.make_thumbnail = async function(from, to, oldSpec) {
+exports.make_thumbnail = async function(from, to, oldSpec) { // eslint-disable-line no-undef
   const extractor = async function(from, to) {
-    try {
-      const image = await loadImage(from);
+    const image = await loadImage(from);
 
-      const width = image.width;
-      const height = image.height;
-      const w = width > height ? 52 : Math.ceil(52 * width / height);
-      const h = width > height ? Math.ceil(52 * height / width) : 52;
+    const width = image.width;
+    const height = image.height;
+    const w = width > height ? 52 : Math.ceil(52 * width / height);
+    const h = width > height ? Math.ceil(52 * height / width) : 52;
 
-      const canvas = createCanvas(w, h);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(image, 0, 0, w, h);
+    const canvas = createCanvas(w, h);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0, w, h);
 
-      const jpgTile = canvas.toBuffer('image/jpeg', {quality: 0.9});
-      fs.outputFile(to, jpgTile);
-    } catch (e) {
-      throw e;
-    }
+    const jpgTile = canvas.toBuffer('image/jpeg', {quality: 0.9});
+    await fs.outputFile(to, jpgTile);
   };
 
   if (oldSpec) {

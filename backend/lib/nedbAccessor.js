@@ -1,6 +1,6 @@
 'use strict';
 
-const Datastore = require("nedb");
+const Datastore = require("nedb"); // eslint-disable-line no-undef
 
 let instance;
 
@@ -19,7 +19,7 @@ class nedbAccessor {
 
   async delete(mapID) {
     return new Promise((res, rej) => {
-      this.db.remove({ _id: mapID }, {}, (err, num) => {
+      this.db.remove({ _id: mapID }, {}, (err, _num) => {
         if (err) rej(err);
         else res();
       });
@@ -38,7 +38,7 @@ class nedbAccessor {
   async upsert(mapID, data) {
     return new Promise((res, rej) => {
       data._id = mapID;
-      this.db.update({ _id: mapID }, data, { upsert: true }, (err, num) => {
+      this.db.update({ _id: mapID }, data, { upsert: true }, (err, _num) => {
         if (err) rej(err);
         else res();
       });

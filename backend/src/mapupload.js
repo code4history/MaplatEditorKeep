@@ -2,7 +2,7 @@
 
 const pf = process.platform; // eslint-disable-line no-undef
 const isAsar = __dirname.match(/app\.asar/); // eslint-disable-line no-undef
-const canvasPath = pf == 'darwin' ?
+const canvasPath = pf === 'darwin' ?
   isAsar ? '../../../app.asar.unpacked/assets/mac/canvas' : '../../assets/mac/canvas' :
   isAsar ? '../../../app.asar.unpacked/assets/win/canvas' : '../../assets/win/canvas';
 const { createCanvas, Image } = require(canvasPath); // eslint-disable-line no-undef
