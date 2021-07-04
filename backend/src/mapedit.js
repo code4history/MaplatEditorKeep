@@ -20,6 +20,8 @@ let tmpFolder;
 let focused;
 let dbFile;
 let nedb;
+let extentCheck;
+let extentBuffer;
 
 const mapedit = {
   init() {
@@ -345,6 +347,26 @@ const mapedit = {
   async getTmsListOfMapID(mapID) {
     if (mapID) return settings.getTmsListOfMapID(mapID);
     else return this.getTmsList();
+  },
+  async checkExtentMap(extent) {
+    if (!extentCheck) {
+      if (!(extentBuffer && extentBuffer.reduce((ret, item, idx) => ret && (item === extent[idx]), true))) {
+        extentCheck = true;
+        extentBuffer = extent;
+        const mapList = await nedb.searchExtent(extent);
+        console.log('mapList');
+        focused.webContents.send('extentMapList', mapList);
+        setTimeout(() => {
+          extent = extentCheck;
+          extentCheck = undefined;
+          if (extent !== true) {
+            this.checkExtentMap(extent);
+          }
+        }, 1000);
+      }
+    } else {
+      extentCheck = extent;
+    }
   },
   getWmtsFolder() {
     const saveFolder = settings.getSetting('saveFolder');

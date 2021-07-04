@@ -608,7 +608,7 @@ function tinResultUpdate() {
     });
     modify.on('modifyend', (evt) => {
       vueMap.bounds = evt.features.item(0).getGeometry().getCoordinates()[0].filter((item, index, array) =>
-        index === array.length - 1 ? false : true).map((merc) => transform(merc, 'EPSG:3857', forProj));
+        index !== array.length - 1).map((merc) => transform(merc, 'EPSG:3857', forProj));
       backend.updateTin(vueMap.gcps, vueMap.edges, vueMap.currentEditingLayer, vueMap.bounds, vueMap.strictMode, vueMap.vertexMode);
     });
     snap = new Snap({source: boundsSource});
@@ -1207,6 +1207,20 @@ function mapObjectInit() {
   });
   mercMap.addInteraction(edgeModify);
   mercMap.addInteraction(edgeSnap);
+  const extentCheck = async (view) => {
+    const extent = view.calculateExtent();
+    backend.checkExtentMap(extent);
+  };
+  /*mercMap.getView().on('change', (evt) => {
+    extentCheck(evt.target);
+  });*/
+  let firstRender = false;//true;
+  mercMap.on('postrender', (evt) => {
+    if (!firstRender) {
+      firstRender = false;
+      extentCheck(mercMap.getView());
+    }
+  });
 
   // ベースマップリスト作成
   let tmsList;
