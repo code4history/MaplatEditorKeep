@@ -391,7 +391,8 @@ const VueMap = Vue.extend({
       },
       langs,
       editingID_: '',
-      newGcp: undefined
+      newGcp: undefined,
+      mappingUIRow: 'layer'
     };
     },
   methods: {

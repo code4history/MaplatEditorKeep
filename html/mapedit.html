@@ -192,20 +192,43 @@
           <div class="h100">
             <div class="row map-control-header">
               <div class="col-xs-2">
-                <select class="form-control" name="editingLayer" v-model.number="currentEditingLayer">
-                  <option value="0">{{$t('mapedit.map_mainlayer')}}</option>
-                  <option v-for="(sub_map, index) in sub_maps" :value="index+1">{{$t('mapedit.map_sublayer')}}{{index+1}}</option>
+                <select class="form-control" name="mappingUIRow" v-model="mappingUIRow">
+                  <option value="layer">{{$t('mapedit.edit_layer')}}</option>
+                  <option value="coordinate">{{$t('mapedit.edit_coordinate')}}</option>
                 </select>
               </div>
               <div class="col-xs-10">
-                <button type="button" class="btn btn-default" v-on:click="addSubMap">{{$t('mapedit.map_addlayer')}}</button>
-                <button type="button" class="btn btn-default" v-on:click="$emit('removeSubMap')" v-bind:disabled="currentEditingLayer===0">{{$t('mapedit.map_removelayer')}}</button>
-                　<label>{{$t('mapedit.map_importance')}}: {{importance}}</label>
-                <button type="button" class="btn btn-default" v-bind:disabled="!canUpImportance" v-on:click="upImportance">{{$t('mapedit.map_importance_up')}}</button>
-                <button type="button" class="btn btn-default" v-bind:disabled="!canDownImportance" v-on:click="downImportance">{{$t('mapedit.map_importance_down')}}</button>
-                　<label>{{$t('mapedit.map_priority')}}: {{priority}}</label>
-                <button type="button" class="btn btn-default" v-bind:disabled="!canUpPriority" v-on:click="upPriority">{{$t('mapedit.map_priority_up')}}</button>
-                <button type="button" class="btn btn-default" v-bind:disabled="!canDownPriority" v-on:click="downPriority">{{$t('mapedit.map_priority_down')}}</button>
+                <div  v-if="mappingUIRow === 'layer'" class="row">
+                  <div class="col-xs-3">
+                    <select class="form-control" name="editingLayer" v-model.number="currentEditingLayer">
+                      <option value="0">{{$t('mapedit.map_mainlayer')}}</option>
+                      <option v-for="(sub_map, index) in sub_maps" :value="index+1">{{$t('mapedit.map_sublayer')}}{{index+1}}</option>
+                    </select>
+                  </div>
+                  <div class="col-xs-3">
+                    <button type="button" class="btn btn-default" v-on:click="addSubMap">{{$t('mapedit.map_addlayer')}}</button>
+                    <button type="button" class="btn btn-default" v-on:click="$emit('removeSubMap')" v-bind:disabled="currentEditingLayer===0">{{$t('mapedit.map_removelayer')}}</button>
+                  </div>
+                  <div class="col-xs-3">
+                    <label>{{$t('mapedit.map_importance')}}: {{importance}}</label>
+                    <button type="button" class="btn btn-default" v-bind:disabled="!canUpImportance" v-on:click="upImportance"><i class="glyphicon glyphicon-arrow-up"></i></button>
+                    <button type="button" class="btn btn-default" v-bind:disabled="!canDownImportance" v-on:click="downImportance"><i class="glyphicon glyphicon-arrow-down"></i></button>
+                  </div>
+                  <div class="col-xs-3">
+                  　<label>{{$t('mapedit.map_priority')}}: {{priority}}</label>
+                    <button type="button" class="btn btn-default" v-bind:disabled="!canUpPriority" v-on:click="upPriority"><i class="glyphicon glyphicon-arrow-up"></i></button>
+                    <button type="button" class="btn btn-default" v-bind:disabled="!canDownPriority" v-on:click="downPriority"><i class="glyphicon glyphicon-arrow-down"></i></button>
+                  </div>
+                </div>
+                <div  v-if="mappingUIRow === 'coordinate'" class="row">
+                  <div class="col-xs-2"><label for="reference">{{$t('mapedit.marker_id')}}</label><input type="text" id="editingID" class="form-control" disabled="true" v-model="editingID"></div>
+                  <div class="row col-xs-10">
+                    <div class="col-xs-3"><label for="reference">X</label><input type="text" id="editingX" class="form-control" v-bind:disabled="editingX === ''" v-model.lazy.number="editingX"></div>
+                    <div class="col-xs-3"><label for="reference">Y</label><input type="text" id="editingY" class="form-control" v-bind:disabled="editingY === ''" v-model.lazy.number="editingY"></div>
+                    <div class="col-xs-3"><label for="reference">{{$t('mapedit.longitude')}}</label><input type="text" id="editingLong" class="form-control" v-bind:disabled="editingLong === ''" v-model.lazy.number="editingLong"></div>
+                    <div class="col-xs-3"><label for="reference">{{$t('mapedit.latitude')}}</label><input type="text" id="editingLat" class="form-control" v-bind:disabled="editingLat === ''" v-model.lazy.number="editingLat"></div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row map-row">
@@ -214,18 +237,6 @@
               </div>
               <div id="mercMap" class="col-xs-6 h100">
                 <button type="button" class="btn btn-default homeBtn" v-bind:disabled="!enableSetHomeMerc" v-on:click="$emit('setHomeMerc')"><i class="glyphicon glyphicon-home"></i></button>
-              </div>
-            </div>
-            <div v-if="gcps.length === 0" class="row map-control-coordinates">
-              サンプル座標群読み込み
-            </div>
-            <div v-if="gcps.length > 0" class="row map-control-coordinates">
-              <div class="col-xs-2"><label for="reference">{{$t('mapedit.marker_id')}}</label><input type="text" id="editingID" class="form-control" disabled="true" v-model="editingID"></div>
-              <div class="row col-xs-10">
-                <div class="col-xs-3"><label for="reference">X</label><input type="text" id="editingX" class="form-control" v-bind:disabled="editingX === ''" v-model.lazy.number="editingX"></div>
-                <div class="col-xs-3"><label for="reference">Y</label><input type="text" id="editingY" class="form-control" v-bind:disabled="editingY === ''" v-model.lazy.number="editingY"></div>
-                <div class="col-xs-3"><label for="reference">{{$t('mapedit.longitude')}}</label><input type="text" id="editingLong" class="form-control" v-bind:disabled="editingLong === ''" v-model.lazy.number="editingLong"></div>
-                <div class="col-xs-3"><label for="reference">{{$t('mapedit.latitude')}}</label><input type="text" id="editingLat" class="form-control" v-bind:disabled="editingLat === ''" v-model.lazy.number="editingLat"></div>
               </div>
             </div>
             <div class="row map-control-footer">

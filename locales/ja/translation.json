@@ -39,7 +39,8 @@
     "deleting_old": "旧データファイル削除中...",
     "deleted_old": "旧データファイル削除完了",
     "migration_confirm": "旧仕様の地図データファイルがあります。\nデータベースへの移行を行いますか?",
-    "delete_old_confirm": "新仕様へのデータ移行が完了しました。\n旧仕様のデータファイルを削除しますか?"
+    "delete_old_confirm": "新仕様へのデータ移行が完了しました。\n旧仕様のデータファイルを削除しますか?",
+    "search_placeholder": "検索条件を入力してください"
   },
   "mapedit": {
     "edit_metadata": "メタデータ編集",
@@ -111,8 +112,8 @@
     "map_description_desc": "地図の説明文を入力してください。",
     "map_mainlayer": "メインレイヤ",
     "map_sublayer": "サブレイヤ",
-    "map_addlayer": "レイヤ追加",
-    "map_removelayer": "レイヤ削除",
+    "map_addlayer": "追加",
+    "map_removelayer": "削除",
     "map_importance": "重要度",
     "map_importance_up": "重要度UP",
     "map_importance_down": "重要度DOWN",
@@ -174,7 +175,9 @@
     "testerror_outside_map": "地図領域範囲外のため、変換ができません。",
     "marker_id": "マーカーID",
     "latitude": "緯度",
-    "longitude": "経度"
+    "longitude": "経度",
+    "edit_layer": "地図レイヤ編集",
+    "edit_coordinate": "座標編集"
   },
   "mapupload": {
     "map_image": "地図画像",

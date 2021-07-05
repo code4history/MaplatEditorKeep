@@ -39,7 +39,8 @@
     "deleting_old": "Removing old data files...",
     "deleted_old": "Removing old data is finished",
     "migration_confirm": "There are map data files with old specifications.\nDo you want to migrate them to the database?",
-    "delete_old_confirm": "The data migration to the new specification is completed.\nDo you want to delete the old data files?"
+    "delete_old_confirm": "The data migration to the new specification is completed.\nDo you want to delete the old data files?",
+    "search_placeholder": "Input search condition"
   },
   "mapedit": {
     "edit_metadata": "Edit Metadata",
@@ -111,8 +112,8 @@
     "map_description_desc": "Enter the description of the map.",
     "map_mainlayer": "Main Layer",
     "map_sublayer": "Sub Layer ",
-    "map_addlayer": "Add Layer",
-    "map_removelayer": "Remove Layer",
+    "map_addlayer": "Add",
+    "map_removelayer": "Remove",
     "map_importance": "Importance",
     "map_importance_up": "Raise importance",
     "map_importance_down": "Reduce importance",
@@ -173,7 +174,9 @@
     "testerror_outside_map": "Cannot perform projection test because it is outside the map area.",
     "marker_id": "Marker ID",
     "latitude": "Latitude",
-    "longitude": "Longitude"
+    "longitude": "Longitude",
+    "edit_layer": "Edit map layer",
+    "edit_coordinate": "Edit coordinate"
   },
   "mapupload": {
     "map_image": "Map Image",
