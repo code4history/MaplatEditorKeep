@@ -1221,8 +1221,12 @@ function mapObjectInit() {
       extentCheck(mercMap.getView());
     }
   });
+  ipcRenderer.on('extentMapList', (event, arg) => {
+    console.log(arg);
+    vueMap.templateMaps = arg;
+  });
 
-  // ベースマップリスト作成
+    // ベースマップリスト作成
   let tmsList;
   const promises = backend.getTmsListOfMapID(mapID).then((list) => {
     tmsList = list;

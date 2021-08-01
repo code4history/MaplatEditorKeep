@@ -153,6 +153,14 @@ computed.defaultLangFlag = {
     }
   }
 };
+computed.templateMaps = {
+  get() {
+    return this.gcps.length > 0 ? this.templateMaps_ : [];
+  },
+  set(maps) {
+    this.templateMaps_ = maps;
+  }
+};
 computed.imageExtensionCalc = function() {
   if (this.imageExtension) return this.imageExtension;
   if (this.width && this.height) return 'jpg';
@@ -392,7 +400,8 @@ const VueMap = Vue.extend({
       langs,
       editingID_: '',
       newGcp: undefined,
-      mappingUIRow: 'layer'
+      mappingUIRow: 'layer',
+      templateMaps_: []
     };
     },
   methods: {
