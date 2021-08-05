@@ -6,7 +6,7 @@ const canvasPath = pf === 'darwin' ?
   isAsar ? '../../../app.asar.unpacked/assets/mac/canvas' : '../../assets/mac/canvas' :
   isAsar ? '../../../app.asar.unpacked/assets/win/canvas' : '../../assets/win/canvas';
 const { createCanvas, loadImage } = require(canvasPath); // eslint-disable-line no-undef
-const Tin = require('@maplat/tin'); // eslint-disable-line no-undef
+const Tin = require('@maplat/tin').default; // eslint-disable-line no-undef
 
 const path = require('path'); // eslint-disable-line no-undef
 //const app = require('electron').app; // eslint-disable-line no-undef

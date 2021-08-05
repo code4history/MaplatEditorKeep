@@ -171,7 +171,7 @@ function gcpsToMarkers (targetIndex) {
 
   for (let i=0; i<gcps.length; i++) {
     const gcp = gcps[i];
-    const mapXyIllst = illstSource.xy2HistMapCoords(gcp[0]);
+    const mapXyIllst = illstSource.xy2SysCoord(gcp[0]);
 
     const labelWidth = getTextWidth( (i + 1), labelFontStyle ) + 10;
 
@@ -201,8 +201,8 @@ stroke-width="2"></polygon>
   for (let i=0; i<edges.length; i++) {
     const gcp1 = gcps[edges[i][2][0]];
     const gcp2 = gcps[edges[i][2][1]];
-    const illst1 = illstSource.xy2HistMapCoords(gcp1[0]);
-    const illst2 = illstSource.xy2HistMapCoords(gcp2[0]);
+    const illst1 = illstSource.xy2SysCoord(gcp1[0]);
+    const illst2 = illstSource.xy2SysCoord(gcp2[0]);
     const style = new Style({
       stroke: new Stroke({
         color: 'red',
@@ -220,7 +220,7 @@ stroke-width="2"></polygon>
     };
     const illstCoords = [illst1];
     edges[i][0].map((node) => {
-      illstCoords.push(illstSource.xy2HistMapCoords(node));
+      illstCoords.push(illstSource.xy2SysCoord(node));
     });
     illstCoords.push(illst2);
     const illstLine = {
@@ -274,7 +274,7 @@ function pairingMarker (arg, map) { // eslint-disable-line no-unused-vars
   if (gcpIndex !== 'new') {
     const gcps = vueMap.gcps;
     const gcp = gcps[gcpIndex];
-    const forw = illstSource.xy2HistMapCoords(gcp[0]);
+    const forw = illstSource.xy2SysCoord(gcp[0]);
     const bakw = gcp[1];
     const forView = illstMap.getView();
     const bakView = mercMap.getView();
@@ -316,7 +316,7 @@ function showHomePosition(arg, map) { // eslint-disable-line no-unused-vars
 
       const illstSize = mercSize.map((coord) => {
         const xy = vueMap.tinObjects[0].transform(coord, true);
-        return illstSource.xy2HistMapCoords(xy);
+        return illstSource.xy2SysCoord(xy);
       });
 
       const centerZoom = xys2Size(illstSize, wh);
@@ -345,7 +345,7 @@ function addMarkerOnEdge (arg, map) {
   const edgeGeom = arg.data.edge;
   const isIllst = map === illstMap;
   const coord = edgeGeom.getGeometry().getClosestPoint(arg.coordinate);
-  const xy = isIllst ? arrayRoundTo(illstSource.histMapCoords2Xy(coord), 2) : arrayRoundTo(coord, 6);
+  const xy = isIllst ? arrayRoundTo(illstSource.sysCoord2Xy(coord), 2) : arrayRoundTo(coord, 6);
   const startEnd = edgeGeom.get('startEnd');
   const edgeIndex = vueMap.edges.findIndex((edge) => edge[2][0] === startEnd[0] && edge[2][1] === startEnd[1]);
   const edge = vueMap.edges[edgeIndex];
@@ -459,7 +459,7 @@ function addNewMarker (arg, map) {
   const number = gcps.length + 1;
   const isIllst = map === illstMap;
   const coord = arg.coordinate;
-  const xy = isIllst ? arrayRoundTo(illstSource.histMapCoords2Xy(coord), 2) : arrayRoundTo(coord, 6);
+  const xy = isIllst ? arrayRoundTo(illstSource.sysCoord2Xy(coord), 2) : arrayRoundTo(coord, 6);
 
   if (!vueMap.newGcp) {
     const labelWidth = getTextWidth( number, labelFontStyle ) + 10;
@@ -524,7 +524,7 @@ function onClick(evt) {
   const srcMap = isIllst ? illstMap : mercMap;
   const distMap = isIllst ? mercMap : illstMap;
   const srcMarkerLoc = evt.coordinate;
-  const srcXy = isIllst ? arrayRoundTo(illstSource.histMapCoords2Xy(srcMarkerLoc),2) : arrayRoundTo(srcMarkerLoc, 6);
+  const srcXy = isIllst ? arrayRoundTo(illstSource.sysCoord2Xy(srcMarkerLoc),2) : arrayRoundTo(srcMarkerLoc, 6);
 
   const srcCheck = srcMap.getSource('check');
   const distCheck = distMap.getSource('check');
@@ -551,7 +551,7 @@ function onClick(evt) {
     return;
   }
 
-  const distMarkerLoc = isIllst ? distXy : illstSource.xy2HistMapCoords(distXy);
+  const distMarkerLoc = isIllst ? distXy : illstSource.xy2SysCoord(distXy);
   distMap.getView().setCenter(distMarkerLoc);
 
   const iconSVG = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -608,7 +608,7 @@ function tinResultUpdate() {
     });
     modify.on('modifyend', (evt) => {
       vueMap.bounds = evt.features.item(0).getGeometry().getCoordinates()[0].filter((item, index, array) =>
-        index === array.length - 1 ? false : true).map((merc) => transform(merc, 'EPSG:3857', forProj));
+        index !== array.length - 1).map((merc) => transform(merc, 'EPSG:3857', forProj));
       backend.updateTin(vueMap.gcps, vueMap.edges, vueMap.currentEditingLayer, vueMap.bounds, vueMap.strictMode, vueMap.vertexMode);
     });
     snap = new Snap({source: boundsSource});
@@ -692,7 +692,7 @@ function reflectIllstMap() {
     .then((source) => {
       illstSource = source;
       illstMap.exchangeSource(illstSource);
-      const initialCenter = illstSource.xy2HistMapCoords([vueMap.width / 2, vueMap.height / 2]);
+      const initialCenter = illstSource.xy2SysCoord([vueMap.width / 2, vueMap.height / 2]);
       const illstView = illstMap.getView();
       illstView.setCenter(initialCenter);
 
@@ -859,7 +859,7 @@ class Drag extends Pointer {
     const isIllst = map === illstMap;
     const feature = this.feature_;
     let xy = feature.getGeometry().getCoordinates();
-    xy = isIllst ? arrayRoundTo(illstSource.histMapCoords2Xy(xy), 2) : arrayRoundTo(xy, 6);
+    xy = isIllst ? arrayRoundTo(illstSource.sysCoord2Xy(xy), 2) : arrayRoundTo(xy, 6);
 
     const gcpIndex = feature.get('gcpIndex');
     if (gcpIndex !== 'new') {
@@ -1014,7 +1014,7 @@ MaplatMap.prototype.initContextMenu = function() { // eslint-disable-line
       restore = false;
     }
     if (this.map_ === illstMap) {
-      const xy = arrayRoundTo(illstSource.histMapCoords2Xy(evt.coordinate), 2);
+      const xy = arrayRoundTo(illstSource.sysCoord2Xy(evt.coordinate), 2);
       const outsideCheck = vueMap.currentEditingLayer ? (xy) => {
         const bboxPoints = Object.assign([], vueMap.bounds);
         bboxPoints.push(vueMap.bounds[0]);
@@ -1353,12 +1353,12 @@ function setVueMap() {
     const illstCenter = view.getCenter();
     const illstZoom = view.getZoom();
 
-    const illstSize = illstSource.size2Xys(illstCenter, illstZoom, 0);
+    const illstSize = illstSource.viewPoint2SysCoords(illstCenter, illstZoom, 0);
     const wh = illstSize[5];
     delete illstSize[5];
 
     const mercSize = illstSize.map((coords) => {
-      const xy = illstSource.histMapCoords2Xy(coords);
+      const xy = illstSource.sysCoord2Xy(coords);
       const merc = vueMap.tinObjects[0].transform(xy, false);
       return merc;
     });
@@ -1377,7 +1377,7 @@ function setVueMap() {
       if (vueMap.newGcp) return gcpIndex === 'new';
       else return gcpIndex === vueMap.editingID - 1;
     })[0];
-    const xy = illstSource.xy2HistMapCoords(vueMap.newGcp ? vueMap.newGcp[0] : vueMap.gcps[vueMap.editingID - 1][0]);
+    const xy = illstSource.xy2SysCoord(vueMap.newGcp ? vueMap.newGcp[0] : vueMap.gcps[vueMap.editingID - 1][0]);
     feature.getGeometry().setCoordinates(xy);
   });
 
