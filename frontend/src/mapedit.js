@@ -1480,11 +1480,13 @@ function setVueMap() {
       ipcRenderer.on('mapUploaded', (event, arg) => {
         document.body.style.pointerEvents = null; // eslint-disable-line no-undef
         if (arg.err) {
-          if (arg.err !== 'Canceled') vueModal.finish(t('mapedit.error_image_upload')); // eslint-disable-line no-undef
-          else vueModal.finish(t('mapedit.updownload_canceled'));
+          if (arg.err !== 'Canceled') {
+            console.log(arg.err); // eslint-disable-line no-undef
+            vueModal.finish(t('mapedit.error_image_upload'));
+          } else vueModal.finish(t('mapedit.updownload_canceled'));
           return;
         } else {
-          vueModal.finish(t('mapedit.success_image_upload')); // eslint-disable-line no-undef
+          vueModal.finish(t('mapedit.success_image_upload'));
         }
         vueMap.width = arg.width;
         vueMap.height = arg.height;

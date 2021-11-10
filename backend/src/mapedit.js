@@ -40,7 +40,7 @@ const mapedit = {
   async request(mapID) {
     const json = await nedb.find(mapID);
     let url_;
-    const whReady = (json.width && json.height) || json.compiled.wh;
+    const whReady = (json.width && json.height) || (json.compiled && json.compiled.wh);
     if (!whReady) {
       focused.webContents.send('mapData', [json, ]);
       return;
@@ -131,6 +131,7 @@ const mapedit = {
     const mapID = mapObject.mapID;
     const url_ = mapObject.url_;
     const imageExtension = mapObject.imageExtension || mapObject.imageExtention || 'jpg';
+    if (tins.length == 0) tins = ['tooLessGcps'];
     const compiled = await storeHandler.histMap2Store(mapObject, tins);
 
     const tmpFolder = `${settings.getSetting('tmpFolder')}${path.sep}tiles`;
