@@ -5,9 +5,8 @@ const isAsar = __dirname.match(/app\.asar/); // eslint-disable-line no-undef
 const canvasPath = pf === 'darwin' ?
   isAsar ? '../../../app.asar.unpacked/assets/mac/canvas' : '../../assets/mac/canvas' :
   isAsar ? '../../../app.asar.unpacked/assets/win/canvas' : '../../assets/win/canvas';
-const { createCanvas, createImageData } = require(canvasPath); // eslint-disable-line no-undef
+const { createCanvas, Image } = require(canvasPath); // eslint-disable-line no-undef
 const Tin = require('@maplat/tin').default; // eslint-disable-line no-undef
-const sizeOf = require('image-size'); // eslint-disable-line no-undef
 
 const path = require('path'); // eslint-disable-line no-undef
 //const app = require('electron').app; // eslint-disable-line no-undef
@@ -113,10 +112,15 @@ const WmtsGenerator = {
       const canvas = createCanvas(width, height);
       const ctx = canvas.getContext('2d');
 
-      const dim = sizeOf(imagePath);
-      const res = fs.readFileSync(imagePath);
-      const u16 = new Uint16Array( res.buffer );
-      const image = createImageData(u16, dim.width, dim.height);
+      const image = await new Promise((res, rej) => {
+        fs.readFile(imagePath, (err, buf) => {
+          if (err) rej(err);
+          const img = new Image();
+          img.onload = () => { res(img) };
+          img.onerror = (err) => { rej(err) };
+          img.src = buf;
+        });
+      });
 
       ctx.drawImage(image, 0, 0);
       const imgData = ctx.getImageData(0, 0, width, height);
@@ -168,10 +172,15 @@ const WmtsGenerator = {
         const oy = dy * 128;
         const upImage = `${tileRoot}${path.sep}${downZoom}${path.sep}${ux}${path.sep}${uy}.png`;
         try {
-          const dim = sizeOf(upImage);
-          const res = fs.readFileSync(upImage);
-          const u16 = new Uint16Array( res.buffer );
-          const image = createImageData(u16, dim.width, dim.height);
+          const image = await new Promise((res, rej) => {
+            fs.readFile(upImage, (err, buf) => {
+              if (err) rej(err);
+              const img = new Image();
+              img.onload = () => { res(img) };
+              img.onerror = (err) => { rej(err) };
+              img.src = buf;
+            });
+          });
           if (image) tileCtx.drawImage(image, ox, oy, 128, 128);
         } catch(e) {} // eslint-disable-line no-empty
       }
