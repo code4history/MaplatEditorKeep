@@ -8,11 +8,15 @@ const assetsPath = pf == 'darwin' ?
   isAsar ? '../../../app.asar.unpacked/assets/mac' : '../../assets/mac' :
   isAsar ? '../../../app.asar.unpacked/assets/win' : '../../assets/win';
 const canvasPath = `${assetsPath}/canvas`;
-const { createCanvas, loadImage } = require(canvasPath); // eslint-disable-line no-undef
+const { createCanvas, createImageData } = require(canvasPath); // eslint-disable-line no-undef
+const sizeOf = require('image-size'); // eslint-disable-line no-undef
 
 exports.make_thumbnail = async function(from, to, oldSpec) { // eslint-disable-line no-undef
   const extractor = async function(from, to) {
-    const image = await loadImage(from);
+    const dim = sizeOf(from);
+    const res = fs.readFileSync(from);
+    const u16 = new Uint16Array( res.buffer );
+    const image = createImageData(u16, dim.width, dim.height);
 
     const width = image.width;
     const height = image.height;
