@@ -1,5 +1,9 @@
-const gulp = require("gulp");
-const fs = require("fs-extra");
+const gulp = require("gulp"); // eslint-disable-line no-undef
+const fs = require("fs-extra"); // eslint-disable-line no-undef
+const { execSync } = require('child_process'); // eslint-disable-line no-undef
+
+const minimist = require('minimist'); // eslint-disable-line no-undef
+const osArchFinder = require("./backend/lib/os_arch"); // eslint-disable-line no-undef
 
 gulp.task("git_switch", async () => {
   try {
@@ -11,3 +15,36 @@ gulp.task("git_switch", async () => {
     fs.moveSync('.git.keep', '.git');
   }
 });
+
+gulp.task("exec", async () => {
+  const commands = [];
+  if (osArchFinder()[0] === "win") {
+    commands.push("chcp 65001");
+  }
+  commands.push("npm run js_build");
+  commands.push("npm run css_build");
+  commands.push("electron .");
+  execSync(commands.join (" && "));
+});
+
+gulp.task("canvas_rebuild", async () => {
+  const [os, arch_abbr, pf, arch] = getArchOption();
+
+  execSync(`electron-rebuild --arch ${arch}`);
+  console.log(`build_${os}_${arch_abbr}.js`);
+  const assets_root = `./assets/${os}_${arch_abbr}`;
+  fs.ensureDirSync(assets_root);
+  try {
+    fs.removeSync(`${assets_root}/canvas`);
+  } catch(e) {
+    console.log("No");
+  }
+  fs.moveSync("./node_modules/canvas", `${assets_root}/canvas`);
+});
+
+function getArchOption() {
+  const options = minimist(process.argv.slice(2), { // eslint-disable-line no-undef
+    string: 'arch'
+  });
+  return osArchFinder(options.arch);
+}
