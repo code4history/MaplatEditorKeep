@@ -1,14 +1,7 @@
 'use strict';
 
 const fs = require('fs-extra'); // eslint-disable-line no-undef
-
-const pf = process.platform; // eslint-disable-line no-undef
-const isAsar = __dirname.match(/app\.asar/); // eslint-disable-line no-undef
-const assetsPath = pf == 'darwin' ?
-  isAsar ? '../../../app.asar.unpacked/assets/mac' : '../../assets/mac' :
-  isAsar ? '../../../app.asar.unpacked/assets/win' : '../../assets/win';
-const canvasPath = `${assetsPath}/canvas`;
-const { createCanvas, Image } = require(canvasPath); // eslint-disable-line no-undef
+const { createCanvas, Image } = require('../lib/canvasLoader'); // eslint-disable-line no-undef
 
 exports.make_thumbnail = async function(from, to, oldSpec) { // eslint-disable-line no-undef
   const extractor = async function(from, to) {
