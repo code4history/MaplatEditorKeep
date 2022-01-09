@@ -24,22 +24,32 @@ gulp.task("exec", async () => {
   commands.push("npm run js_build");
   commands.push("npm run css_build");
   commands.push("electron .");
-  execSync(commands.join (" && "));
+  execSync(commands.join(" && "), {stdio: 'inherit'});
 });
 
 gulp.task("canvas_rebuild", async () => {
   const [os, arch_abbr, pf, arch] = getArchOption();
 
-  execSync(`electron-rebuild --arch ${arch}`);
-  console.log(`build_${os}_${arch_abbr}.js`);
+  execSync(`electron-rebuild --arch ${arch}`, {stdio: 'inherit'});
   const assets_root = `./assets/${os}_${arch_abbr}`;
   fs.ensureDirSync(assets_root);
   try {
     fs.removeSync(`${assets_root}/canvas`);
-  } catch(e) {
-    console.log("No");
-  }
+  } catch(e) {}
   fs.moveSync("./node_modules/canvas", `${assets_root}/canvas`);
+});
+
+gulp.task("build", async () => {
+  const [os, arch_abbr, pf, arch] = getArchOption();
+  const commands = [
+    "npm run lint",
+    "npm run js_build",
+    "npm run css_build"
+  ];
+  const packege_cmd = `electron-builder --${os} --${arch} --config ./build_${os}_${arch_abbr}.js`;
+  commands.push(packege_cmd);
+  execSync(commands.join(" && "), {stdio: 'inherit'});
+  execSync(`electron-rebuild --arch ${arch}`);
 });
 
 function getArchOption() {

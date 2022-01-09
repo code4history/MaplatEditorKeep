@@ -1,6 +1,6 @@
 {
   "name": "MaplatEditor",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "",
   "main": "backend/src/main.js",
   "scripts": {
@@ -8,10 +8,9 @@
     "js_build": "webpack",
     "css_build": "lessc --clean-css css/theme.css frontend/dist/maplateditor.css",
     "exec": "gulp exec",
-    "win_build": "npm run lint && npm run js_build && npm run css_build && npm run win_package",
-    "mac_build": "npm run lint && npm run js_build && npm run css_build && npm run mac_package",
-    "win_package": "electron-builder --win --x64 --config ./build_win.js",
-    "mac_package": "electron-builder --mac --x64 --config ./build_mac.js",
+    "build": "gulp build",
+    "build_x": "gulp build --arch x64",
+    "build_arm": "gulp build --arch arm64",
     "canvas_rebuild": "gulp canvas_rebuild",
     "canvas_rebuild_x": "gulp canvas_rebuild --arch x64",
     "canvas_rebuild_arm": "gulp canvas_rebuild --arch arm64",

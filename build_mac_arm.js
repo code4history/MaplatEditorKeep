@@ -1,13 +1,13 @@
 const config = {
   "appId": "jp.maplat.editor",
   "asarUnpack": [
-    "assets/mac/canvas"
+    "assets/mac_arm/canvas"
   ],
   "directories": {
     "output": "dist"
   },
   "files": [
-    "assets/mac",
+    "assets/mac_arm",
     "backend",
     "css",
     "frontend/dist",
@@ -21,7 +21,7 @@ const config = {
   ],
   "afterSign": "script/notarize/notarize.js",
   "mac": {
-    "icon": "assets/mac/icon_mac.icns",
+    "icon": "assets/mac_arm/icon_mac.icns",
     "target": [
       "dmg"
     ],
@@ -29,14 +29,6 @@ const config = {
     "gatekeeperAssess": false,
     "entitlements": "script/notarize/entitlements.mac.plist",
     "entitlementsInherit": "script/notarize/entitlements.mac.plist"
-  },
-  "win": {
-    "icon": "assets/win/icon_win.ico",
-    "target": "nsis"
-  },
-  "nsis":{
-    "oneClick": false,
-    "allowToChangeInstallationDirectory": true
   }
 };
 
