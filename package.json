@@ -12,6 +12,7 @@
     "build_x": "gulp build --arch x64",
     "build_arm": "gulp build --arch arm64",
     "canvas_rebuild": "gulp canvas_rebuild",
+    "canvas_rebuild_dummy": "gulp canvas_rebuild_dummy",
     "canvas_rebuild_x": "gulp canvas_rebuild --arch x64",
     "canvas_rebuild_arm": "gulp canvas_rebuild --arch arm64",
     "git_switch": "gulp git_switch"
