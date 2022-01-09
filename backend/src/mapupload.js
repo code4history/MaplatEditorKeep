@@ -1,6 +1,6 @@
 'use strict';
 
-const { createCanvas, Image } = require('../lib/canvasLoader'); // eslint-disable-line no-undef
+const { createCanvas, Image } = require('../lib/canvas_loader'); // eslint-disable-line no-undef
 
 const path = require('path'); // eslint-disable-line no-undef
 const app = require('electron').app; // eslint-disable-line no-undef

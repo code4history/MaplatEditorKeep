@@ -1448,7 +1448,7 @@ function setVueMap() {
   });
   vueMap.$on('wmtsGenerate', () => {
     if (!wmtsGenerator) {
-      wmtsGenerator = require('electron').remote.require('./wmtsGenerator'); // eslint-disable-line no-undef
+      wmtsGenerator = require('electron').remote.require('./wmts_generator'); // eslint-disable-line no-undef
       wmtsGenerator.init();
       ipcRenderer.on('wmtsGenerated', (event, arg) => {
         document.body.style.pointerEvents = null; // eslint-disable-line no-undef

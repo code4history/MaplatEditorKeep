@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs-extra'); // eslint-disable-line no-undef
-const { createCanvas, Image } = require('../lib/canvasLoader'); // eslint-disable-line no-undef
+const { createCanvas, Image } = require('../lib/canvas_loader'); // eslint-disable-line no-undef
 
 exports.make_thumbnail = async function(from, to, oldSpec) { // eslint-disable-line no-undef
   const extractor = async function(from, to) {
