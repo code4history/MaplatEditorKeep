@@ -157,7 +157,7 @@ x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background
     if (vueMap.errorStatus === 'strict' || vueMap.errorStatus === 'loose') {
       const tinObject = vueMap.tinObjects[0];
       const xy = tinObject.transform(merc, true);
-      const histCoord = illstSource.xy2HistMapCoords(xy);
+      const histCoord = illstSource.xy2SysCoord(xy);
       illstMap.setMarker(histCoord, {gcpIndex: 'home'}, homeStyle);
     }
   }
@@ -1373,9 +1373,7 @@ function setVueMap() {
     const illstCenter = view.getCenter();
     const illstZoom = view.getZoom();
 
-    const illstSize = illstSource.viewPoint2SysCoords(illstCenter, illstZoom, 0);
-    const wh = illstSize[5];
-    delete illstSize[5];
+    const [illstSize, wh] = illstSource.viewpoint2SysCoords([illstCenter, illstZoom, 0]);
 
     const mercSize = illstSize.map((coords) => {
       const xy = illstSource.sysCoord2Xy(coords);
