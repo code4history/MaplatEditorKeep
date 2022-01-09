@@ -47,9 +47,9 @@ gulp.task("build", async () => {
     "npm run css_build"
   ];
   const packege_cmd = `electron-builder --${os} --${arch} --config ./build_${os}_${arch_abbr}.js`;
+  console.log(packege_cmd);
   commands.push(packege_cmd);
   execSync(commands.join(" && "), {stdio: 'inherit'});
-  execSync(`electron-rebuild --arch ${arch}`);
 });
 
 function getArchOption() {
