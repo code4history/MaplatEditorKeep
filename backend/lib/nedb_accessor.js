@@ -1,6 +1,6 @@
 'use strict';
 
-const Datastore = require("nedb"); // eslint-disable-line no-undef
+const Datastore = require("@seald-io/nedb"); // eslint-disable-line no-undef
 
 let instance;
 
