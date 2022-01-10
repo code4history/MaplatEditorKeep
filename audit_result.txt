@@ -1,0 +1,126 @@
+# npm audit report
+
+ansi-regex  >2.1.1 <5.0.1
+Severity: moderate
+ Inefficient Regular Expression Complexity in chalk/ansi-regex - https://github.com/advisories/GHSA-93q8-gq69-wqmw
+fix available via `npm audit fix --force`
+Will install eslint@8.6.0, which is a breaking change
+node_modules/eslint/node_modules/ansi-regex
+node_modules/table/node_modules/ansi-regex
+node_modules/webpack-cli/node_modules/ansi-regex
+  strip-ansi  4.0.0 - 5.2.0
+  Depends on vulnerable versions of ansi-regex
+  node_modules/eslint/node_modules/strip-ansi
+  node_modules/table/node_modules/strip-ansi
+  node_modules/webpack-cli/node_modules/strip-ansi
+    cliui  4.0.0 - 5.0.0
+    Depends on vulnerable versions of strip-ansi
+    Depends on vulnerable versions of wrap-ansi
+    node_modules/webpack-cli/node_modules/cliui
+      yargs  10.1.0 - 15.0.0
+      Depends on vulnerable versions of cliui
+      Depends on vulnerable versions of string-width
+      node_modules/webpack-cli/node_modules/yargs
+        webpack-cli  3.3.5 - 3.3.12
+        Depends on vulnerable versions of yargs
+        node_modules/webpack-cli
+    eslint  4.5.0 - 7.15.0
+    Depends on vulnerable versions of strip-ansi
+    Depends on vulnerable versions of table
+    node_modules/eslint
+    string-width  2.1.0 - 4.1.0
+    Depends on vulnerable versions of strip-ansi
+    node_modules/table/node_modules/string-width
+    node_modules/webpack-cli/node_modules/string-width
+      table  4.0.2 - 5.4.6
+      Depends on vulnerable versions of string-width
+      node_modules/table
+      wrap-ansi  3.0.0 - 6.1.0
+      Depends on vulnerable versions of string-width
+      Depends on vulnerable versions of strip-ansi
+      node_modules/webpack-cli/node_modules/wrap-ansi
+
+clean-css  <4.1.11
+Regular Expression Denial of Service in clean-css - https://github.com/advisories/GHSA-wxhq-pm8v-cw75
+No fix available
+node_modules/less-plugin-clean-css/node_modules/clean-css
+  less-plugin-clean-css  *
+  Depends on vulnerable versions of clean-css
+  node_modules/less-plugin-clean-css
+
+glob-parent  <5.1.2
+Severity: high
+Regular expression denial of service - https://github.com/advisories/GHSA-ww39-953v-wcq6
+fix available via `npm audit fix --force`
+Will install gulp@3.9.1, which is a breaking change
+node_modules/glob-parent
+  chokidar  1.0.0-rc1 - 2.1.8
+  Depends on vulnerable versions of glob-parent
+  node_modules/chokidar
+    glob-watcher  >=3.0.0
+    Depends on vulnerable versions of chokidar
+    node_modules/glob-watcher
+      gulp  >=4.0.0
+      Depends on vulnerable versions of glob-watcher
+      node_modules/gulp
+    watchpack-chokidar2  *
+    Depends on vulnerable versions of chokidar
+    node_modules/watchpack-chokidar2
+      watchpack  1.7.2 - 1.7.5
+      Depends on vulnerable versions of watchpack-chokidar2
+      node_modules/watchpack
+        webpack  4.44.0 - 4.46.0
+        Depends on vulnerable versions of watchpack
+        node_modules/webpack
+  glob-stream  5.3.0 - 6.1.0
+  Depends on vulnerable versions of glob-parent
+  node_modules/glob-stream
+    vinyl-fs  >=2.4.2
+    Depends on vulnerable versions of glob-stream
+    node_modules/vinyl-fs
+
+postcss  <8.2.13
+Severity: moderate
+Regular Expression Denial of Service in postcss - https://github.com/advisories/GHSA-566m-qj78-rww5
+fix available via `npm audit fix --force`
+Will install css-loader@6.5.1, which is a breaking change
+node_modules/postcss
+  @vue/component-compiler-utils  *
+  Depends on vulnerable versions of postcss
+  node_modules/@vue/component-compiler-utils
+    vue-loader  15.0.0-beta.1 - 15.9.8
+    Depends on vulnerable versions of @vue/component-compiler-utils
+    node_modules/vue-loader
+  css-loader  0.15.0 - 4.3.0
+  Depends on vulnerable versions of icss-utils
+  Depends on vulnerable versions of postcss
+  Depends on vulnerable versions of postcss-modules-values
+  node_modules/css-loader
+  icss-utils  <=4.1.1
+  Depends on vulnerable versions of postcss
+  node_modules/icss-utils
+    postcss-modules-local-by-default  <=4.0.0-rc.4
+    Depends on vulnerable versions of icss-utils
+    Depends on vulnerable versions of postcss
+    node_modules/postcss-modules-local-by-default
+    postcss-modules-values  <=4.0.0-rc.5
+    Depends on vulnerable versions of icss-utils
+    Depends on vulnerable versions of postcss
+    node_modules/postcss-modules-values
+  postcss-modules-extract-imports  <=2.0.0
+  Depends on vulnerable versions of postcss
+  node_modules/postcss-modules-extract-imports
+  postcss-modules-scope  <=2.2.0
+  Depends on vulnerable versions of postcss
+  node_modules/postcss-modules-scope
+
+29 vulnerabilities (2 low, 18 moderate, 9 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
