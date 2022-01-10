@@ -133,6 +133,15 @@
     <Filter Include="..">
       <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C:">
+      <UniqueIdentifier>{7B735499-E5DD-1C2B-6C26-70023832A1CF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C:\libjpeg-turbo64">
+      <UniqueIdentifier>{55FFCBF8-B55A-5746-4769-4399C14F48D9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C:\libjpeg-turbo64\bin">
+      <UniqueIdentifier>{11CC0371-6539-7E04-3B24-030E187A74AC}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\backend\Backend.cc">
@@ -188,6 +197,9 @@
     </ClCompile>
     <None Include="..\binding.gyp">
       <Filter>..</Filter>
+    </None>
+    <None Include="C:\libjpeg-turbo64\bin\jpeg62.dll">
+      <Filter>C:\libjpeg-turbo64\bin</Filter>
     </None>
   </ItemGroup>
 </Project>

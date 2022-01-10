@@ -36,7 +36,7 @@ gulp.task("canvas_rebuild", async () => {
   try {
     fs.removeSync(`${assets_root}/canvas`);
   } catch(e) {}
-  fs.moveSync("./node_modules/canvas", `${assets_root}/canvas`);
+  fs.copySync("./node_modules/canvas", `${assets_root}/canvas`);
   if (os === "mac") dylib_handler(`${assets_root}/canvas/build/Release`);
 });
 
