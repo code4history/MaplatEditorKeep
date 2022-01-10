@@ -11,7 +11,7 @@ local.properties
 mobile_android.iml
 .gradle
 app.iml
-b_uild
+build
 project.xcworkspace
 xcuserdata
 *.qgs

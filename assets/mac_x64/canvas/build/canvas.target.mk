@@ -14,6 +14,7 @@ DEFS_Debug := \
 	'-D_FILE_OFFSET_BITS=64' \
 	'-DV8_COMPRESS_POINTERS' \
 	'-DV8_31BIT_SMIS_ON_64BIT_ARCH' \
+	'-DV8_REVERSE_JSARGS' \
 	'-DOPENSSL_NO_PINSHARED' \
 	'-DOPENSSL_THREADS' \
 	'-DHAVE_JPEG' \
@@ -52,13 +53,13 @@ CFLAGS_OBJC_Debug :=
 CFLAGS_OBJCC_Debug :=
 
 INCS_Debug := \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/include/node \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/src \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/openssl/config \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/openssl/openssl/include \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/uv/include \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/zlib \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/v8/include \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/include/node \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/src \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/openssl/config \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/openssl/openssl/include \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/uv/include \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/zlib \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/v8/include \
 	-I$(srcdir)/../nan \
 	-I/usr/local/Cellar/libffi/3.3_3/include \
 	-I/usr/local/Cellar/cairo/1.16.0_3/include/cairo \
@@ -88,6 +89,7 @@ DEFS_Release := \
 	'-D_FILE_OFFSET_BITS=64' \
 	'-DV8_COMPRESS_POINTERS' \
 	'-DV8_31BIT_SMIS_ON_64BIT_ARCH' \
+	'-DV8_REVERSE_JSARGS' \
 	'-DOPENSSL_NO_PINSHARED' \
 	'-DOPENSSL_THREADS' \
 	'-DHAVE_JPEG' \
@@ -96,7 +98,7 @@ DEFS_Release := \
 
 # Flags passed to all source files.
 CFLAGS_Release := \
-	-Os \
+	-O3 \
 	-gdwarf-2 \
 	-mmacosx-version-min=10.10 \
 	-arch x86_64 \
@@ -123,13 +125,13 @@ CFLAGS_OBJC_Release :=
 CFLAGS_OBJCC_Release :=
 
 INCS_Release := \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/include/node \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/src \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/openssl/config \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/openssl/openssl/include \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/uv/include \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/zlib \
-	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/9.4.0/deps/v8/include \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/include/node \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/src \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/openssl/config \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/openssl/openssl/include \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/uv/include \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/zlib \
+	-I/Users/kokogiko/github/MaplatEditorKeep/node_modules/canvas/11.5.0/deps/v8/include \
 	-I$(srcdir)/../nan \
 	-I/usr/local/Cellar/libffi/3.3_3/include \
 	-I/usr/local/Cellar/cairo/1.16.0_3/include/cairo \
