@@ -1227,8 +1227,26 @@ function mapObjectInit() {
   });
   mercMap.addInteraction(edgeModify);
   mercMap.addInteraction(edgeSnap);
+  const extentCheck = async (view) => {
+    const extent = view.calculateExtent();
+    backend.checkExtentMap(extent);
+  };
+  /*mercMap.getView().on('change', (evt) => {
+    extentCheck(evt.target);
+  });*/
+  let firstRender = false;//true;
+  mercMap.on('postrender', (evt) => {
+    if (!firstRender) {
+      firstRender = false;
+      extentCheck(mercMap.getView());
+    }
+  });
+  ipcRenderer.on('extentMapList', (event, arg) => {
+    console.log(arg);
+    vueMap.templateMaps = arg;
+  });
 
-  // ベースマップリスト作成
+    // ベースマップリスト作成
   let tmsList;
   const promises = backend.getTmsListOfMapID(mapID).then((list) => {
     tmsList = list;
