@@ -302,7 +302,7 @@ const mapedit = {
     if (!json) focused.webContents.send('checkIDResult', true);
     else focused.webContents.send('checkIDResult', false);
   },
-  uploadCsv(csvRepl, csvUpSettings) {
+  uploadCsv(csvRepl, csvUpSettings, mapParams) {
     console.log(csvUpSettings);
     dialog.showOpenDialog({ defaultPath: app.getPath('documents'), properties: ['openFile'],
       filters: [ {name: csvRepl, extensions: []} ]}).then((ret) => {
@@ -346,6 +346,7 @@ const mapedit = {
             });
             console.log(gcps);
             console.log(error);
+            this.updateTin(gcps, [], ...mapParams);
           })
           .on('error', (e) => {
             console.log("Error");
@@ -364,6 +365,7 @@ const mapedit = {
       });
   },
   createTinFromGcpsAsync(gcps, edges, wh, bounds, strict, vertex) {
+    console.log(gcps[0]);
     if (gcps.length < 3) return Promise.resolve('tooLessGcps');
     return new Promise((resolve, reject) => {
       const tin = new Tin({});

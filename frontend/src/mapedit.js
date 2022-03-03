@@ -1544,7 +1544,7 @@ function setVueMap() {
   });
   vueMap.$on('uploadCsv', () => {
     //document.body.style.pointerEvents = 'none'; // eslint-disable-line no-undef
-    backend.uploadCsv("CSVファイル", vueMap.csvUploadUiValue);
+    backend.uploadCsv("CSVファイル", vueMap.csvUploadUiValue, [vueMap.currentEditingLayer, vueMap.bounds, vueMap.strictMode, vueMap.vertexMode]);
   });
   vueMap.$on('saveMap', async () => {
     if ((await dialog.showMessageBox({
