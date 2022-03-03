@@ -11,7 +11,10 @@ const AdmZip = require('adm-zip'); // eslint-disable-line no-undef
 const rfs = require('recursive-fs'); // eslint-disable-line no-undef
 const ProgressReporter = require('../lib/progress_reporter'); // eslint-disable-line no-undef
 const nedbAccessor = require('../lib/nedb_accessor'); // eslint-disable-line no-undef
-const storeHandler = require('@maplat/core/es5/source/store_handler'); // eslint-disable-line no-undef
+const storeHandler = require('@maplat/core/es5/source/store_handler');
+const {dialog} = require("electron"); // eslint-disable-line no-undef
+const csv = require('csv-parser');
+const proj  = require('proj4');
 
 let tileFolder;
 let originalFolder;
@@ -133,7 +136,7 @@ const mapedit = {
     const mapID = mapObject.mapID;
     const url_ = mapObject.url_;
     const imageExtension = mapObject.imageExtension || mapObject.imageExtention || 'jpg';
-    if (tins.length == 0) tins = ['tooLessGcps'];
+    if (tins.length === 0) tins = ['tooLessGcps'];
     const compiled = await storeHandler.histMap2Store(mapObject, tins);
 
     const tmpFolder = `${settings.getSetting('tmpFolder')}${path.sep}tiles`;
@@ -299,9 +302,60 @@ const mapedit = {
     if (!json) focused.webContents.send('checkIDResult', true);
     else focused.webContents.send('checkIDResult', false);
   },
+  uploadCsv(csvRepl, csvUpSettings) {
+    console.log(csvUpSettings);
+    dialog.showOpenDialog({ defaultPath: app.getPath('documents'), properties: ['openFile'],
+      filters: [ {name: csvRepl, extensions: []} ]}).then((ret) => {
+      if (ret.canceled) {
+        focused.webContents.send('csvUploaded', {
+          err: 'Canceled'
+        });
+      } else {
+        const errorRaiser = (errMsg) => {
+          console.log(errMsg);
+        };
+        const file = ret.filePaths[0];
+        const results = [];
+        const options = {
+          strict: true,
+          headers: false,
+          skipLines: csvUpSettings.ignoreHeader ? 1 : 0
+        };
+        fs.createReadStream(file)
+          .pipe(csv(options))
+          .on('data', (data) => results.push(data))
+          .on('end', () => {
+            let error;
+            const gcps = [];
+            if (results.length === 0) error = "CSVファイルのフォーマットが異常です";
+            results.forEach((line) => {
+              if (error) return;
+              try {
+                const illstCoord = [];
+                const rawGeoCoord = [];
+                illstCoord[0] = parseFloat(line[csvUpSettings.pixXColumn - 1]);
+                illstCoord[1] = parseFloat(line[csvUpSettings.pixYColumn - 1]);
+                if (csvUpSettings.reverseMapY) illstCoord[1] = -1 * illstCoord[1];
+                rawGeoCoord[0] = parseFloat(line[csvUpSettings.lngColumn - 1]);
+                rawGeoCoord[1] = parseFloat(line[csvUpSettings.latColumn - 1]);
+                const geoCoord = proj(csvUpSettings.projText, "EPSG:3857", rawGeoCoord);
+                gcps.push([illstCoord, geoCoord]);
+              } catch(e) {
+                error = "CSVファイルのフォーマットが異常です";
+              }
+            });
+            console.log(gcps);
+            console.log(error);
+          })
+          .on('error', (e) => {
+            console.log("Error");
+          });
+      }
+    });
+  },
   updateTin(gcps, edges, index, bounds, strict, vertex) {
-    const wh = index == 0 ? bounds : null;
-    const bd = index != 0 ? bounds : null;
+    const wh = index === 0 ? bounds : null;
+    const bd = index !== 0 ? bounds : null;
     this.createTinFromGcpsAsync(gcps, edges, wh, bd, strict, vertex)
       .then((tin) => {
         focused.webContents.send('updatedTin', [index, tin]);

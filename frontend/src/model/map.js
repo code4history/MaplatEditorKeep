@@ -4,6 +4,7 @@ import {Language} from "./language";
 import crypto from 'crypto';
 import Tin from '@maplat/tin';
 import {transform} from "ol/proj";
+import proj from "proj4";
 
 Vue.config.debug = true;
 const langObj = Language.getSingleton();
@@ -174,21 +175,35 @@ computed.wmtsEditReady = function() {
 }
 computed.csvUpError = function() {
   const uiValue = this.csvUploadUiValue;
+  console.log(typeof uiValue.pixXColumn);
   if (uiValue.pixXColumn === uiValue.pixYColumn || uiValue.pixXColumn === uiValue.lngColumn || uiValue.pixXColumn === uiValue.latColumn ||
     uiValue.pixYColumn === uiValue.lngColumn || uiValue.pixYColumn === uiValue.latColumn || uiValue.lngColumn === uiValue.latColumn) {
     return "column_dup";
+  } else if (!(typeof uiValue.pixXColumn == 'number' && typeof uiValue.pixYColumn == 'number' && typeof uiValue.lngColumn == 'number' && typeof uiValue.latColumn == 'number')) {
+    return "column_null";
+  } else if (!(typeof uiValue.ignoreHeader == 'number')) {
+    return "ignore_header";
   } else {
-    return false;
+    if (uiValue.projText === "") return "proj_text";
+    try {
+      proj(uiValue.projText, "EPSG:4326");
+      return false;
+    } catch(e) {
+      return "proj_text";
+    }
   }
+}
+computed.csvProjTextError = function() {
+
 }
 computed.csvProjPreset = {
   get() {
     const uiValue = this.csvUploadUiValue;
-    return uiValue.projText === "SRID:4326" ? "wgs84" : uiValue.projText === "SRID:3857" ? "mercator" : "other";
+    return uiValue.projText === "EPSG:4326" ? "wgs84" : uiValue.projText === "EPSG:3857" ? "mercator" : "other";
   },
   set(newValue) {
     const uiValue = this.csvUploadUiValue;
-    uiValue.projText = newValue === "wgs84" ? "SRID:4326" : newValue === "mercator" ? "SRID:3857" : "";
+    uiValue.projText = newValue === "wgs84" ? "EPSG:4326" : newValue === "mercator" ? "EPSG:3857" : "";
   }
 }
 computed.dirty = function() {
@@ -419,9 +434,9 @@ const VueMap = Vue.extend({
           pixYColumn: 2,
           lngColumn: 3,
           latColumn: 4,
-          ignoreHeader: true,
+          ignoreHeader: 0,
           reverseMapY: false,
-          projText: "SRID:4326"
+          projText: "EPSG:4326"
         },
         csvProjPreset: "wgs84",
         tinObjects: []
@@ -440,7 +455,7 @@ const VueMap = Vue.extend({
         pixYColumn: 2,
         lngColumn: 3,
         latColumn: 4,
-        ignoreHeader: true,
+        ignoreHeader: 2,
         reverseMapY: true,
       });
     },
