@@ -83,7 +83,7 @@ for (let i=0; i<langAttr.length; i++) {
     })(key),
   }
 }
-const shareAttr = ['currentLang', 'onlyOne', 'vueInit', 'currentEditingLayer', 'map',
+const shareAttr = ['currentLang', 'onlyOne', 'vueInit', 'currentEditingLayer', 'csvUploadUiValue', 'map',
   'map_'];
 for (let i=0; i<shareAttr.length; i++) {
   const key = shareAttr[i];
@@ -171,6 +171,25 @@ computed.gcpsEditReady = function() {
 computed.wmtsEditReady = function() {
   const tin = this.share.tinObjects[0];
   return (this.mainLayerHash && this.wmtsDirty && tin.strict_status === Tin.STATUS_STRICT);
+}
+computed.csvUpError = function() {
+  const uiValue = this.csvUploadUiValue;
+  if (uiValue.pixXColumn === uiValue.pixYColumn || uiValue.pixXColumn === uiValue.lngColumn || uiValue.pixXColumn === uiValue.latColumn ||
+    uiValue.pixYColumn === uiValue.lngColumn || uiValue.pixYColumn === uiValue.latColumn || uiValue.lngColumn === uiValue.latColumn) {
+    return "column_dup";
+  } else {
+    return false;
+  }
+}
+computed.csvProjPreset = {
+  get() {
+    const uiValue = this.csvUploadUiValue;
+    return uiValue.projText === "SRID:4326" ? "wgs84" : uiValue.projText === "SRID:3857" ? "mercator" : "other";
+  },
+  set(newValue) {
+    const uiValue = this.csvUploadUiValue;
+    uiValue.projText = newValue === "wgs84" ? "SRID:4326" : newValue === "mercator" ? "SRID:3857" : "";
+  }
 }
 computed.dirty = function() {
   return !_.isDeepEqual(this.map_, this.map);
@@ -395,6 +414,16 @@ const VueMap = Vue.extend({
         onlyOne: false,
         vueInit: false,
         currentEditingLayer: 0,
+        csvUploadUiValue: {
+          pixXColumn: 1,
+          pixYColumn: 2,
+          lngColumn: 3,
+          latColumn: 4,
+          ignoreHeader: true,
+          reverseMapY: false,
+          projText: "SRID:4326"
+        },
+        csvProjPreset: "wgs84",
         tinObjects: []
       },
       langs,
@@ -405,6 +434,16 @@ const VueMap = Vue.extend({
     };
     },
   methods: {
+    csvQgisSetting() {
+      this.csvUploadUiValue = Object.assign(this.csvUploadUiValue, {
+        pixXColumn: 1,
+        pixYColumn: 2,
+        lngColumn: 3,
+        latColumn: 4,
+        ignoreHeader: true,
+        reverseMapY: true,
+      });
+    },
     setCurrentAsDefault() {
       this.map_ = _.deepClone(this.map);
       },

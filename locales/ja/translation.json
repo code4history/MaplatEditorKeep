@@ -46,7 +46,7 @@
     "line_selected_already": "その対応線は指定済です。",
     "edit_metadata": "メタデータ編集",
     "edit_gcp": "対応点編集",
-    "wmts": "WMTS (参考機能)",
+    "dataset_inout": "データセット入出力",
     "configure_map": "地図設定",
     "set_default": "デフォルトに設定",
     "mapid": "地図ID",

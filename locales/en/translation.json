@@ -46,7 +46,7 @@
     "line_selected_already": "This corresponding line is already specified.",
     "edit_metadata": "Edit Metadata",
     "edit_gcp": "Edit GCP",
-    "wmts": "WMTS (Reference)",
+    "dataset_inout": "Input/output dataset",
     "configure_map": "Configure Map",
     "set_default": "Set as default",
     "mapid": "Map ID",
