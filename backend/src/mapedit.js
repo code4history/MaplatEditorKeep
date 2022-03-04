@@ -302,18 +302,14 @@ const mapedit = {
     if (!json) focused.webContents.send('checkIDResult', true);
     else focused.webContents.send('checkIDResult', false);
   },
-  uploadCsv(csvRepl, csvUpSettings, mapParams) {
-    console.log(csvUpSettings);
+  uploadCsv(csvRepl, csvUpSettings) {
     dialog.showOpenDialog({ defaultPath: app.getPath('documents'), properties: ['openFile'],
       filters: [ {name: csvRepl, extensions: []} ]}).then((ret) => {
       if (ret.canceled) {
-        focused.webContents.send('csvUploaded', {
+        focused.webContents.send('uploadedCsv', {
           err: 'Canceled'
         });
       } else {
-        const errorRaiser = (errMsg) => {
-          console.log(errMsg);
-        };
         const file = ret.filePaths[0];
         const results = [];
         const options = {
@@ -344,12 +340,21 @@ const mapedit = {
                 error = "CSVファイルのフォーマットが異常です";
               }
             });
-            console.log(gcps);
-            console.log(error);
-            this.updateTin(gcps, [], ...mapParams);
+            if (error) {
+              focused.webContents.send('uploadedCsv', {
+                err: error
+              });
+            } else {
+              console.log(gcps);
+              focused.webContents.send('uploadedCsv', {
+                gcps
+              });
+            }
           })
           .on('error', (e) => {
-            console.log("Error");
+            focused.webContents.send('uploadedCsv', {
+              err: e
+            });
           });
       }
     });
@@ -365,7 +370,6 @@ const mapedit = {
       });
   },
   createTinFromGcpsAsync(gcps, edges, wh, bounds, strict, vertex) {
-    console.log(gcps[0]);
     if (gcps.length < 3) return Promise.resolve('tooLessGcps');
     return new Promise((resolve, reject) => {
       const tin = new Tin({});

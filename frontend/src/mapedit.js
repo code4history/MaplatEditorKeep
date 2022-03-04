@@ -1493,7 +1493,7 @@ function setVueMap() {
     if (!uploader) {
       uploader = require('electron').remote.require('./mapupload'); // eslint-disable-line no-undef
       uploader.init();
-      ipcRenderer.on('mapUploaded', (event, arg) => {
+      ipcRenderer.on('uploadedMap', (event, arg) => {
         document.body.style.pointerEvents = null; // eslint-disable-line no-undef
         if (arg.err) {
           if (arg.err !== 'Canceled') {
@@ -1542,9 +1542,32 @@ function setVueMap() {
       return tin.getCompiled();
     }));
   });
-  vueMap.$on('uploadCsv', () => {
+  vueMap.$on('uploadCsv', async () => {
+    if (vueMap.gcps.length > 0) {
+      if ((await dialog.showMessageBox({
+        type: 'info',
+        buttons: ['OK', 'Cancel'],
+        cancelId: 1,
+        message: "GCPは既に登録済みです。CSVを読み込むとGCPはリセットされますが、よろしいですか?"
+      })).response === 1) return; // eslint-disable-line no-undef
+    }
     //document.body.style.pointerEvents = 'none'; // eslint-disable-line no-undef
     backend.uploadCsv("CSVファイル", vueMap.csvUploadUiValue, [vueMap.currentEditingLayer, vueMap.bounds, vueMap.strictMode, vueMap.vertexMode]);
+    ipcRenderer.once('uploadedCsv', async (event, arg) => {
+      document.body.style.pointerEvents = null; // eslint-disable-line no-undef
+      if (arg.err) {
+        const message = arg.err === 'Canceled' ? t('mapedit.updownload_canceled') : `エラーが発生しました: ${arg.err}`;
+        await dialog.showMessageBox({
+          type: 'info',
+          buttons: ['OK'],
+          message
+        });
+        return;
+      } else if (arg.gcps) {
+        vueMap._updateWholeGcps(arg.gcps);
+        gcpsToMarkers();
+      }
+    });
   });
   vueMap.$on('saveMap', async () => {
     if ((await dialog.showMessageBox({

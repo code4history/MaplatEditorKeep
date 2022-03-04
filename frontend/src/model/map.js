@@ -449,6 +449,15 @@ const VueMap = Vue.extend({
     };
     },
   methods: {
+    _updateWholeGcps(gcps) {
+      if (this.currentEditingLayer === 0) {
+        this.map.gcps = gcps;
+        this.$set(this.map, 'edges', []);
+      } else if (this.map.sub_maps.length > 0) {
+        this.map.sub_maps[this.currentEditingLayer - 1].gcps = gcps;
+        this.$set(this.map.sub_maps[this.currentEditingLayer - 1], 'edges', []);
+      }
+    },
     csvQgisSetting() {
       this.csvUploadUiValue = Object.assign(this.csvUploadUiValue, {
         pixXColumn: 1,
