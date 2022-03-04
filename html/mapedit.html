@@ -193,7 +193,7 @@
           <div class="h100">
             <div class="row map-control-header">
               <div class="col-xs-2">
-                <label for="editingLayer">副機能選択</label>
+                <label for="editingLayer">{{$t('mapedit.map_function_select')}}</label>
                 <select class="form-control" id="mappingUIRow"　name="mappingUIRow" v-model="mappingUIRow">
                   <option value="layer">{{$t('mapedit.edit_layer')}}</option>
                   <option value="coordinate">{{$t('mapedit.edit_coordinate')}}</option>
@@ -202,7 +202,7 @@
               <div class="col-xs-10">
                 <div  v-if="mappingUIRow === 'layer'" class="row">
                   <div class="col-xs-5">
-                    <label for="editingLayer">編集レイヤ選択</label>
+                    <label for="editingLayer">{{$t('mapedit.map_layer_select')}}</label>
                     <select class="form-control" id="editingLayer" name="editingLayer" v-model.number="currentEditingLayer">
                       <option value="0">{{$t('mapedit.map_mainlayer')}}</option>
                       <option v-for="(sub_map, index) in sub_maps" :value="index+1">{{$t('mapedit.map_sublayer')}}{{index+1}}</option>
@@ -273,69 +273,67 @@
         </div>
         <div class="tab-pane" id="wmtsTab">
           <div class="panel panel-default">
-            <div class="panel-heading">
-              データセット入力
-            </div>
+            <div class="panel-heading">{{$t('dataio.input_title')}}</div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-3">
-                  <label class="w100">CSVアップロード</label>
+                  <label class="w100">{{$t('dataio.upload_csv')}}</label>
                 </div>
                 <div class="col-xs-5">
-                  <label>アップロード設定エラー状態:</label><label id="csv_error_status">
-                    <span v-if="csvUpError === 'column_dup'">カラムが重複しています</span>
-                    <span v-else-if="csvUpError === 'column_null'">カラムの値が異常です</span>
-                    <span v-else-if="csvUpError === 'ignore_header'">無視ヘッダ行数が異常です</span>
-                    <span v-else-if="csvUpError === 'proj_text'">PROJテキストが解釈できません</span>
+                  <label>{{$t('dataio.upload_csv_status')}}:</label><label id="csv_error_status">
+                    <span v-if="csvUpError === 'column_dup'">{{$t('dataio.csv_error_column_dup')}}</span>
+                    <span v-else-if="csvUpError === 'column_null'">{{$t('dataio.csv_error_column_null')}}</span>
+                    <span v-else-if="csvUpError === 'ignore_header'">{{$t('dataio.csv_error_ignore_header')}}</span>
+                    <span v-else-if="csvUpError === 'proj_text'">{{$t('dataio.csv_error_proj_text')}}</span>
                   </label>
                 </div>
                 <div class="col-xs-4">
-                  <button type="button" class="btn btn-default" id="uploadCsv" v-on:click="$emit('uploadCsv')">CSVファイルアップロード</button>
+                  <button type="button" class="btn btn-default" id="uploadCsv" v-on:click="$emit('uploadCsv')">{{$t('dataio.upload_csv_submit')}}</button>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xs-6">
                   <div class="row">
-                    <div class="col-xs-2"><label for="editingLat">カラム:</label></div>
+                    <div class="col-xs-2"><label for="editingLat">{{$t('dataio.column')}}:</label></div>
                     <div class="col-xs-10">
                       <div class="row">
-                        <div class="col-xs-3"><label for="pixXColumn">ピクセルX</label><input type="text" id="pixXColumn" class="form-control" v-model.lazy.number="csvUploadUiValue.pixXColumn"></div>
-                        <div class="col-xs-3"><label for="pixYColumn">ピクセルY</label><input type="text" id="pixYColumn" class="form-control" v-model.lazy.number="csvUploadUiValue.pixYColumn"></div>
-                        <div class="col-xs-3"><label for="lngColumn">地理座標系X</label><input type="text" id="lngColumn" class="form-control" v-model.lazy.number="csvUploadUiValue.lngColumn"></div>
-                        <div class="col-xs-3"><label for="latColumn">地理座標系Y</label><input type="text" id="latColumn" class="form-control" v-model.lazy.number="csvUploadUiValue.latColumn"></div>
+                        <div class="col-xs-3"><label for="pixXColumn">{{$t('dataio.pix_x_column')}}</label><input type="text" id="pixXColumn" class="form-control" v-model.lazy.number="csvUploadUiValue.pixXColumn"></div>
+                        <div class="col-xs-3"><label for="pixYColumn">{{$t('dataio.pix_y_column')}}</label><input type="text" id="pixYColumn" class="form-control" v-model.lazy.number="csvUploadUiValue.pixYColumn"></div>
+                        <div class="col-xs-3"><label for="lngColumn">{{$t('dataio.lng_column')}}</label><input type="text" id="lngColumn" class="form-control" v-model.lazy.number="csvUploadUiValue.lngColumn"></div>
+                        <div class="col-xs-3"><label for="latColumn">{{$t('dataio.lat_column')}}</label><input type="text" id="latColumn" class="form-control" v-model.lazy.number="csvUploadUiValue.latColumn"></div>
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-xs-12">
-                      <label for="projText">PROJテキスト</label><input type="text" v-bind:disabled="csvProjPreset === 'wgs84' || csvProjPreset === 'mercator'" id="projText" class="form-control" v-model="csvUploadUiValue.projText">
+                      <label for="projText">{{$t('dataio.proj_text')}}</label><input type="text" v-bind:disabled="csvProjPreset === 'wgs84' || csvProjPreset === 'mercator'" id="projText" class="form-control" v-model="csvUploadUiValue.projText">
                     </div>
                   </div>
                 </div>
                 <div class="col-xs-6">
                   <div class="row">
                     <div class="col-xs-6">
-                      <label for="settingCheck">各種設定:</label>
+                      <label for="settingCheck">{{$t('dataio.settings_title')}}:</label>
                       <div class="form-check" id="settingCheck">
                         <input class="form-check-input" type="checkbox" v-model="csvUploadUiValue.reverseMapY" value="" id="reverseMapY">
-                        <label class="form-check-label" for="reverseMapY">ピクセルYを負の値にする</label>
+                        <label class="form-check-label" for="reverseMapY">{{$t('dataio.revert_pix_y')}}</label>
                         <div class="row">
-                          <div class="col-xs-6"><label for="ignoreHeader">無視する先頭行</label></div>
+                          <div class="col-xs-6"><label for="ignoreHeader">{{$t('dataio.ignore_headers')}}</label></div>
                           <div class="col-xs-6"><input class="form-control" type="text" v-model.lazy.number="csvUploadUiValue.ignoreHeader" value="" id="ignoreHeader"></div>
                         </div>
-                        <button type="button" class="btn btn-default" v-on:click="csvQgisSetting()">QGISジオリファレンサのデータを使う</button>
+                        <button type="button" class="btn btn-default" v-on:click="csvQgisSetting()">{{$t('dataio.use_geo_referencer')}}</button>
                       </div>
                     </div>
 
                     <div class="col-xs-6">
-                      <label for="projPreset">PROJテキストプリセット:</label>
+                      <label for="projPreset">{{$t('dataio.proj_text_preset')}}:</label>
                       <div class="form-check" id="projPreset">
                         <input class="form-check-input" type="radio" v-model="csvProjPreset" value="wgs84" id="presetWgs84">
-                        <label class="form-check-label" for="presetWgs84">WGS84経緯度</label><br>
+                        <label class="form-check-label" for="presetWgs84">{{$t('dataio.wgs84_coord')}}</label><br>
                         <input class="form-check-input" type="radio" v-model="csvProjPreset" value="mercator" id="presetMercator">
-                        <label class="form-check-label" for="presetMercator">球面メルカトル</label><br>
+                        <label class="form-check-label" for="presetMercator">{{$t('dataio.sp_merc_coord')}}</label><br>
                         <input class="form-check-input" type="radio" v-model="csvProjPreset" value="other" id="presetOther">
-                        <label class="form-check-label" for="presetOther">直接入力</label>
+                        <label class="form-check-label" for="presetOther">{{$t('dataio.other_coord')}}</label>
                       </div>
                     </div>
                   </div>
@@ -344,9 +342,7 @@
             </div>
           </div>
           <div class="panel panel-default">
-            <div class="panel-heading">
-              データセット出力
-            </div>
+            <div class="panel-heading">{{$t('dataio.output_title')}}</div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-2">

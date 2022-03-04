@@ -323,7 +323,7 @@ const mapedit = {
           .on('end', () => {
             let error;
             const gcps = [];
-            if (results.length === 0) error = "CSVファイルのフォーマットが異常です";
+            if (results.length === 0) error = "csv_format_error";
             results.forEach((line) => {
               if (error) return;
               try {
@@ -337,7 +337,7 @@ const mapedit = {
                 const geoCoord = proj(csvUpSettings.projText, "EPSG:3857", rawGeoCoord);
                 gcps.push([illstCoord, geoCoord]);
               } catch(e) {
-                error = "CSVファイルのフォーマットが異常です";
+                error = "csv_format_error";
               }
             });
             if (error) {
@@ -345,7 +345,6 @@ const mapedit = {
                 err: error
               });
             } else {
-              console.log(gcps);
               focused.webContents.send('uploadedCsv', {
                 gcps
               });

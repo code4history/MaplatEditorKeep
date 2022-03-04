@@ -1548,15 +1548,15 @@ function setVueMap() {
         type: 'info',
         buttons: ['OK', 'Cancel'],
         cancelId: 1,
-        message: "GCPは既に登録済みです。CSVを読み込むとGCPはリセットされますが、よろしいですか?"
+        message: t('dataio.csv_override_confirm')
       })).response === 1) return; // eslint-disable-line no-undef
     }
     //document.body.style.pointerEvents = 'none'; // eslint-disable-line no-undef
-    backend.uploadCsv("CSVファイル", vueMap.csvUploadUiValue, [vueMap.currentEditingLayer, vueMap.bounds, vueMap.strictMode, vueMap.vertexMode]);
+    backend.uploadCsv(t('dataio.csv_file'), vueMap.csvUploadUiValue, [vueMap.currentEditingLayer, vueMap.bounds, vueMap.strictMode, vueMap.vertexMode]);
     ipcRenderer.once('uploadedCsv', async (event, arg) => {
       document.body.style.pointerEvents = null; // eslint-disable-line no-undef
       if (arg.err) {
-        const message = arg.err === 'Canceled' ? t('mapedit.updownload_canceled') : `エラーが発生しました: ${arg.err}`;
+        const message = arg.err === 'Canceled' ? t('mapedit.updownload_canceled') : `${t('dataio.error_occurs')}: ${t(`dataio.${arg.err}`)}`;
         await dialog.showMessageBox({
           type: 'info',
           buttons: ['OK'],
