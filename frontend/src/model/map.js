@@ -175,7 +175,6 @@ computed.wmtsEditReady = function() {
 }
 computed.csvUpError = function() {
   const uiValue = this.csvUploadUiValue;
-  console.log(typeof uiValue.pixXColumn);
   if (uiValue.pixXColumn === uiValue.pixYColumn || uiValue.pixXColumn === uiValue.lngColumn || uiValue.pixXColumn === uiValue.latColumn ||
     uiValue.pixYColumn === uiValue.lngColumn || uiValue.pixYColumn === uiValue.latColumn || uiValue.lngColumn === uiValue.latColumn) {
     return "column_dup";

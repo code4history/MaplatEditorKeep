@@ -1235,14 +1235,14 @@ function mapObjectInit() {
     extentCheck(evt.target);
   });*/
   let firstRender = false;//true;
-  mercMap.on('postrender', (evt) => {
+  mercMap.on('postrender', (evt) => { // eslint-disable-line no-unused-vars
     if (!firstRender) {
       firstRender = false;
       extentCheck(mercMap.getView());
     }
   });
   ipcRenderer.on('extentMapList', (event, arg) => {
-    console.log(arg);
+    console.log(arg); // eslint-disable-line no-undef
     vueMap.templateMaps = arg;
   });
 
