@@ -1523,18 +1523,18 @@ function setVueMap() {
     vueModal.show(t('mapedit.image_uploading'));
     uploader.showMapSelectDialog(t('mapupload.map_image'));
   });
-  vueMap.$on('dlMap', () => {
+  vueMap.$on('exportMap', () => {
     document.body.style.pointerEvents = 'none'; // eslint-disable-line no-undef
-    vueModal.show(t('mapedit.message_download'));
+    vueModal.show(t('mapedit.message_export'));
     ipcRenderer.once('mapDownloadResult', (event, arg) => {
       document.body.style.pointerEvents = null; // eslint-disable-line no-undef
       if (arg === 'Success') {
-        vueModal.finish(t('mapedit.download_success')); // eslint-disable-line no-undef
+        vueModal.finish(t('mapedit.export_success')); // eslint-disable-line no-undef
       } else if (arg === 'Canceled') {
-        vueModal.finish(t('mapedit.updownload_canceled')); // eslint-disable-line no-undef
+        vueModal.finish(t('mapedit.imexport_canceled')); // eslint-disable-line no-undef
       } else {
         console.log(arg); // eslint-disable-line no-undef,no-console
-        vueModal.finish(t('mapedit.download_error')); // eslint-disable-line no-undef
+        vueModal.finish(t('mapedit.export_error')); // eslint-disable-line no-undef
       }
     });
     backend.download(vueMap.map, vueMap.tinObjects.map((tin) => {

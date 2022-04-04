@@ -70,6 +70,7 @@
     "i18next": "^19.6.3",
     "i18next-fs-backend": "^1.0.7",
     "i18next-xhr-backend": "^3.2.2",
+    "jimp": "^0.16.1",
     "nan": "^2.14.0",
     "node-pre-gyp": "^0.15.0",
     "ol": "^6.4.3",

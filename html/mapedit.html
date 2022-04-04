@@ -273,14 +273,22 @@
         </div>
         <div class="tab-pane" id="wmtsTab">
           <div class="panel panel-default">
-            <div class="panel-heading">{{$t('dataio.input_title')}}</div>
+            <div class="panel-heading">{{$t('dataio.import_title')}}</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12">
+                  <label class="form-check-label" for="importMap">{{$t("dataio.import_map_data")}}</label>
+                  <button type="button" class="btn btn-default" id="importMap" v-bind:disabled="error || dirty" v-on:click="$emit('importMap')">{{$t("dataio.import_map_data")}}</button>
+                </div>
+              </div>
+            </div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-xs-3">
-                  <label class="w100">{{$t('dataio.upload_csv')}}</label>
+                  <label class="w100">{{$t('dataio.import_csv')}}</label>
                 </div>
                 <div class="col-xs-5">
-                  <label>{{$t('dataio.upload_csv_status')}}:</label><label id="csv_error_status">
+                  <label>{{$t('dataio.import_csv_status')}}:</label><label id="csv_error_status">
                     <span v-if="csvUpError === 'column_dup'">{{$t('dataio.csv_error_column_dup')}}</span>
                     <span v-else-if="csvUpError === 'column_null'">{{$t('dataio.csv_error_column_null')}}</span>
                     <span v-else-if="csvUpError === 'ignore_header'">{{$t('dataio.csv_error_ignore_header')}}</span>
@@ -288,7 +296,7 @@
                   </label>
                 </div>
                 <div class="col-xs-4">
-                  <button type="button" class="btn btn-default" id="uploadCsv" v-on:click="$emit('uploadCsv')">{{$t('dataio.upload_csv_submit')}}</button>
+                  <button type="button" class="btn btn-default" id="uploadCsv" v-on:click="$emit('uploadCsv')">{{$t('dataio.import_csv_submit')}}</button>
                 </div>
               </div>
               <div class="row">
@@ -342,17 +350,23 @@
             </div>
           </div>
           <div class="panel panel-default">
-            <div class="panel-heading">{{$t('dataio.output_title')}}</div>
+            <div class="panel-heading">{{$t('dataio.export_title')}}</div>
             <div class="panel-body">
               <div class="row">
-                <div class="col-xs-2">
-                  <button type="button" class="btn btn-default" v-on:click="$emit('wmtsGenerate')" v-bind:disabled="!wmtsEditReady">{{$t('wmtsgenerate.generate')}}</button>
+                <div class="col-xs-12">
+                  <label class="form-check-label" for="exportMap">{{$t("mapedit.export_map_data")}}</label>
+                  <button type="button" class="btn btn-default" id="exportMap" v-bind:disabled="error || dirty" v-on:click="$emit('exportMap')">{{$t("mapedit.export_map_data")}}</button>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-5">
+                  <label class="form-check-label" for="wmtsGenerate">{{$t('wmtsgenerate.generate')}}</label>
+                  <button type="button" class="btn btn-default" id="wmtsGenerate" v-bind:disabled="!wmtsEditReady" v-on:click="$emit('wmtsGenerate')">{{$t('wmtsgenerate.generate')}}</button>
                 </div>
                 <div class="col-xs-7">
                   <span>{{$t('wmtsgenerate.result_folder', { folder: wmtsFolder })}}</span>
-                </div>
-                <div class="col-xs-3">
-                  <button type="button" class="btn btn-default" id="dlMap" v-bind:disabled="error || dirty" v-on:click="$emit('dlMap')">{{$t("mapedit.download_map_data")}}</button>
                 </div>
               </div>
             </div>
