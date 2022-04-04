@@ -11,10 +11,10 @@ const AdmZip = require('adm-zip'); // eslint-disable-line no-undef
 const rfs = require('recursive-fs'); // eslint-disable-line no-undef
 const ProgressReporter = require('../lib/progress_reporter'); // eslint-disable-line no-undef
 const nedbAccessor = require('../lib/nedb_accessor'); // eslint-disable-line no-undef
-const storeHandler = require('@maplat/core/es5/source/store_handler');
+const storeHandler = require('@maplat/core/es5/source/store_handler'); // eslint-disable-line no-undef
 const {dialog} = require("electron"); // eslint-disable-line no-undef
-const csv = require('csv-parser');
-const proj  = require('proj4');
+const csv = require('csv-parser'); // eslint-disable-line no-undef
+const proj  = require('proj4'); // eslint-disable-line no-undef
 
 let tileFolder;
 let originalFolder;
@@ -414,9 +414,9 @@ const mapedit = {
         extentCheck = true;
         extentBuffer = extent;
         const mapList = await nedb.searchExtent(extent);
-        console.log('mapList');
+        console.log('mapList'); // eslint-disable-line no-undef
         focused.webContents.send('extentMapList', mapList);
-        setTimeout(() => {
+        setTimeout(() => { // eslint-disable-line no-undef
           extent = extentCheck;
           extentCheck = undefined;
           if (extent !== true) {
